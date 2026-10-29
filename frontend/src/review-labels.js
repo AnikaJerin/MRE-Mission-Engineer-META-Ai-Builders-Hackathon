@@ -1,0 +1,2 @@
+// Display terminology only; never changes a generated finding or stored verdict.
+export function assessmentLabel(status){return ({supported_observation:'Recorded observation — not a performance pass',concern_supported:'Evidence supports a concern',insufficient_evidence:'More evidence needed',conditional_target_met:'Declared target met — conditional',conditional_target_missed:'Declared target missed — conditional'})[status] || String(status).replaceAll('_',' ');}

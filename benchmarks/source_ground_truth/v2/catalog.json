@@ -1,0 +1,149 @@
+{
+  "version": "source-ground-truth-v2-context-complete",
+  "reviewed_on": "2026-10-28",
+  "status": "primary-sources-inspected-not-benchmark-executed",
+  "raw_reactor_telemetry_acquired": false,
+  "expert_review_required_for_these_exact_source_checks": false,
+  "optimal_next_experiment_ground_truth_established": false,
+  "sources": [
+    {
+      "id": "yu2025",
+      "url": "https://ntrs.nasa.gov/citations/20250004626",
+      "download_url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+      "source_group": "yu2025-hollow-anode",
+      "evidence_available": "Published experimental tables; characterization figures; author interpretations and projections",
+      "exposure": "Already inspected development source, including Table 2 pilot cases. Not independent or blind holdout",
+      "rights": "NTRS warns portions may be copyright protected. Link and attribute; do not bundle source PDF/figures without applicable rights review"
+    },
+    {
+      "id": "ksc2025-core",
+      "url": "https://ntrs.nasa.gov/citations/20250004983",
+      "download_url": "https://ntrs.nasa.gov/api/citations/20250004983/downloads/LSIC_MRE_Core_2x3.pdf",
+      "source_group": "ksc-lr1-dec2024",
+      "evidence_available": "Post-test core characterization poster, published summary and composition table",
+      "exposure": "Public source inspected during development; not a prospective blinded experiment",
+      "rights": "NTRS states use by or on behalf of US Government permitted; do not assume unrestricted figure redistribution"
+    },
+    {
+      "id": "ksc2026-demonstration",
+      "url": "https://ntrs.nasa.gov/citations/20260006167",
+      "download_url": "https://ntrs.nasa.gov/api/citations/20260006167/downloads/MRE%20GCD%20ICES26_v3.pdf",
+      "source_group": "ksc-lr1-dec2024",
+      "evidence_available": "NTRS abstract inspected: 25 kg, 9 hours electrolysis, average oxygen rate 0.07 kg/hour",
+      "exposure": "NTRS abstract inspected; presentation download timed out in web reader, so slide contents not verified",
+      "rights": "NTRS record: Public Use Permitted"
+    }
+  ],
+  "reference_checks": [
+    {
+      "id": "exposure-clock",
+      "source_id": "yu2025",
+      "locator": "Table 4, manuscript page 24 (PDF page index 23)",
+      "kind": "published-measurement-transcription",
+      "rows": [
+        {
+          "electrolysis_h": 1,
+          "time_at_1600C_h": 3,
+          "wall_recession_um": 22,
+          "printed_plus_minus_um": 10
+        },
+        {
+          "electrolysis_h": 3,
+          "time_at_1600C_h": 5,
+          "wall_recession_um": 54,
+          "printed_plus_minus_um": 12
+        },
+        {
+          "electrolysis_h": 12,
+          "time_at_1600C_h": 14,
+          "wall_recession_um": 85,
+          "printed_plus_minus_um": 19
+        }
+      ],
+      "answer_requirements": [
+        "Keep electrolysis duration separate from thermal-exposure duration",
+        "Preserve micrometre units and printed plus/minus values",
+        "Do not label plus/minus values as a confidence interval without establishing their source definition"
+      ],
+      "not_established": "Population corrosion rate, failure probability, independently validated lifetime"
+    },
+    {
+      "id": "resistance-direction",
+      "source_id": "yu2025",
+      "locator": "Table 5, manuscript page 28 (PDF page index 27)",
+      "kind": "published-measurement-transcription-and-arithmetic",
+      "rows": [
+        {
+          "electrolysis_h": 1,
+          "initial_ohm": 1.54,
+          "final_ohm": 1.44,
+          "published_change_percent": -6.5
+        },
+        {
+          "electrolysis_h": 3,
+          "initial_ohm": 1.59,
+          "final_ohm": 1.12,
+          "published_change_percent": -29.6
+        },
+        {
+          "electrolysis_h": 12,
+          "initial_ohm": 1.46,
+          "final_ohm": 0.78,
+          "published_change_percent": -46.6
+        }
+      ],
+      "answer_requirements": [
+        "Report decrease rather than increase",
+        "If computing percent change, use 100*(final-initial)/initial and compare within printed rounding",
+        "Separate measurements from the authors' mechanism attribution"
+      ],
+      "not_established": "Unique causal diagnosis from resistance measurements alone"
+    },
+    {
+      "id": "lifetime-is-projected",
+      "source_id": "yu2025",
+      "locator": "Sections 4.2 and 4.4, manuscript pages 32-33",
+      "kind": "source-epistemic-status",
+      "answer_requirements": [
+        "Classify approximately 214 hours/8.9 days as a projection rather than a measured lifetime test",
+        "Preserve the stated constant-rate assumptions",
+        "Do not transfer the projection to LR-1 or call it hardware qualification"
+      ],
+      "not_established": "Correct optimal replacement time for another reactor"
+    },
+    {
+      "id": "cross-publication-rate",
+      "source_ids": [
+        "ksc2025-core",
+        "ksc2026-demonstration"
+      ],
+      "locator": "2025 poster Background; 2026 NTRS abstract",
+      "kind": "published-summary-comparison",
+      "reported_values": [
+        {
+          "source_id": "ksc2025-core",
+          "oxygen_rate_kg_h": 0.1
+        },
+        {
+          "source_id": "ksc2026-demonstration",
+          "oxygen_rate_kg_h": 0.07
+        }
+      ],
+      "answer_requirements": [
+        "Retain both source-specific values",
+        "Do not average them or claim demonstrated degradation without comparable measurement bases",
+        "Do not count related reports of the December 2024 test as independent trials"
+      ],
+      "not_established": "Reason for rate difference; per-report interval and calibration reconciliation"
+    }
+  ],
+  "evaluation_rules": {
+    "raw_model_answers_preserved": true,
+    "source_and_answer_packets_must_be_separate_before_paid_evaluation": true,
+    "answer_key_must_not_be_sent_to_model": true,
+    "same_evidence_and_tool_access_for_comparators": true,
+    "constructed_corruptions_labelled_as_constructed": true,
+    "negative_results_retained": true,
+    "claim_scope": "Source fidelity, numerical consistency and bounded evidence-supported judgments; not validated optimal experiment selection or researcher time savings"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "version": "t12-v1",
+  "answers": {
+    "D01": {
+      "verdict": "request_evidence",
+      "missing_inputs": [
+        "current_record",
+        "gas_measurement_record",
+        "gas_calibration",
+        "reference_conditions",
+        "measurement_uncertainty",
+        "gas_to_mass_documentation"
+      ],
+      "required_refs": [
+        "dev-record"
+      ],
+      "basis": "Original predeclared readiness/contract reference; record presence is not calibration quality.",
+      "tolerance": 0.0
+    },
+    "D02": {
+      "verdict": "request_evidence",
+      "missing_inputs": [
+        "current_record",
+        "gas_measurement_record",
+        "gas_calibration",
+        "reference_conditions",
+        "measurement_uncertainty",
+        "gas_to_mass_documentation"
+      ],
+      "required_refs": [
+        "dev-record"
+      ],
+      "basis": "Original predeclared readiness/contract reference; record presence is not calibration quality.",
+      "tolerance": 0.0
+    },
+    "D03": {
+      "verdict": "proceed_conditional_review",
+      "missing_inputs": [],
+      "required_refs": [
+        "dev-record"
+      ],
+      "basis": "Original predeclared readiness/contract reference; record presence is not calibration quality.",
+      "tolerance": 0.0
+    },
+    "D04": {
+      "verdict": "request_evidence",
+      "missing_inputs": [
+        "gas_calibration"
+      ],
+      "required_refs": [
+        "dev-record"
+      ],
+      "basis": "Original predeclared readiness/contract reference; record presence is not calibration quality.",
+      "tolerance": 0.0
+    },
+    "D05": {
+      "verdict": "reject_input",
+      "missing_inputs": [],
+      "required_refs": [
+        "dev-record"
+      ],
+      "basis": "Original predeclared readiness/contract reference; record presence is not calibration quality.",
+      "tolerance": 0.0
+    },
+    "D06": {
+      "verdict": "reject_scope",
+      "missing_inputs": [],
+      "required_refs": [
+        "dev-record"
+      ],
+      "basis": "Original predeclared readiness/contract reference; record presence is not calibration quality.",
+      "tolerance": 0.0
+    },
+    "E01": {
+      "verdict": "supported",
+      "missing_inputs": [],
+      "required_refs": [
+        "source-record"
+      ],
+      "basis": "The published abstract explicitly states the current and duration; ideal arithmetic is conditional.",
+      "tolerance": 0.01
+    },
+    "E02": {
+      "verdict": "not_established",
+      "missing_inputs": [],
+      "required_refs": [
+        "source-record"
+      ],
+      "basis": "A scale-up goal is stated, without an achieved annual production outcome.",
+      "tolerance": 1e-05
+    },
+    "E03": {
+      "verdict": "contradicted",
+      "missing_inputs": [],
+      "required_refs": [
+        "source-record"
+      ],
+      "basis": "The abstract identifies computational screening and says experimental demonstrations still need to follow.",
+      "tolerance": 0
+    },
+    "E04": {
+      "verdict": "not_established",
+      "missing_inputs": [],
+      "required_refs": [
+        "source-record"
+      ],
+      "basis": "The record supplies no measured lifetime or endurance result supporting 500 hours.",
+      "tolerance": 0
+    },
+    "E05": {
+      "verdict": "supported",
+      "missing_inputs": [],
+      "required_refs": [
+        "source-record"
+      ],
+      "basis": "The abstract explicitly identifies the framework and software environment.",
+      "tolerance": 0
+    },
+    "E06": {
+      "verdict": "contradicted",
+      "missing_inputs": [],
+      "required_refs": [
+        "source-record"
+      ],
+      "basis": "The abstract explicitly identifies the requirements as computed system-model results.",
+      "tolerance": 0
+    }
+  }
+}

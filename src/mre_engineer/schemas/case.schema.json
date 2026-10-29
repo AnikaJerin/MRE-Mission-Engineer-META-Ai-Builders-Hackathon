@@ -1,0 +1,512 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provenance_class": {
+      "const": "published_summary"
+    },
+    "evaluation_role": {
+      "const": "development_only"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configuration": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "quantity"
+              },
+              "field": {
+                "const": "current"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "const": "A"
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "unknown"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "status",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "epistemic_status": {
+                "const": "reported"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "field",
+              "value",
+              "unit",
+              "uncertainty",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "quantity"
+              },
+              "field": {
+                "const": "duration"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "const": "s"
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "unknown"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "status",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "epistemic_status": {
+                "const": "reported"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "field",
+              "value",
+              "unit",
+              "uncertainty",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "quantity"
+              },
+              "field": {
+                "const": "temperature"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "const": "degC"
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "unknown"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "status",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "epistemic_status": {
+                "const": "reported"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "field",
+              "value",
+              "unit",
+              "uncertainty",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "quantity"
+              },
+              "field": {
+                "const": "carrier_flow"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "const": "sccm"
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "unknown"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "status",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "epistemic_status": {
+                "const": "reported"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "field",
+              "value",
+              "unit",
+              "uncertainty",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "quantity"
+              },
+              "field": {
+                "const": "oxygen_mass"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "const": "g"
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "unknown"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "status",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "epistemic_status": {
+                "const": "reported"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "field",
+              "value",
+              "unit",
+              "uncertainty",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "quantity"
+              },
+              "field": {
+                "const": "faradaic_efficiency"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "const": "fraction"
+              },
+              "uncertainty": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "unknown"
+                  },
+                  "value": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "status",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "epistemic_status": {
+                "const": "reported"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "field",
+              "value",
+              "unit",
+              "uncertainty",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transformation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "const": "interpretation"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "epistemic_status": {
+                "const": "author_interpretation"
+              }
+            },
+            "required": [
+              "id",
+              "source_id",
+              "locator",
+              "transformation",
+              "kind",
+              "text",
+              "epistemic_status"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "missing_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "consequence": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "consequence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "case_id",
+    "provenance_class",
+    "evaluation_role",
+    "question",
+    "configuration",
+    "evidence",
+    "missing_inputs",
+    "limitations"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

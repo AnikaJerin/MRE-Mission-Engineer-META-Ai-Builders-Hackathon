@@ -1,0 +1,406 @@
+{
+  "version": "t12-v1",
+  "cases": [
+    {
+      "id": "D01",
+      "split": "development",
+      "kind": "readiness",
+      "title": "Development 1: historical 3h",
+      "source_group": "yu2025-hollow-anode",
+      "lineage": "evaluation/cases.json#historical-3h",
+      "question": "Under the stated A/s/g MRE adapter contract, may measured reconstruction review proceed, or what is missing/unsupported?",
+      "sources": [
+        {
+          "id": "dev-record",
+          "url": "https://ntrs.nasa.gov/citations/20250004626",
+          "locator": "Sections 2.2.1-2.2.2 and Table 2, 3-hour row",
+          "facts": "Published scalar summary only. No underlying traces/calibration receipts acquired. Record absence is about this supplied packet, not an assertion about the original researchers' records."
+        }
+      ],
+      "record": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Yu et al. inverted YSZ/Pt hollow-anode cell, LHS-1 simulant and Mo cathode",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 10800,
+          "duration_unit": "s",
+          "oxygen_mass": 0.237,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": false,
+          "gas_measurement_record": false,
+          "gas_calibration": false,
+          "reference_conditions": false,
+          "measurement_uncertainty": false,
+          "gas_to_mass_documentation": false
+        },
+        "provenance": "Published scalar summary only. No underlying traces/calibration receipts acquired. Record absence is about this supplied packet, not an assertion about the original researchers' records.",
+        "source_url": "https://ntrs.nasa.gov/citations/20250004626",
+        "source_locator": "Sections 2.2.1-2.2.2 and Table 2, 3-hour row",
+        "source_group": "yu2025-hollow-anode",
+        "case_type": "historical-summary",
+        "notes": "Nominal constant current can support conditional arithmetic. It does not establish measured charge or independently calibrated collected gas. No voltage record is mandatory solely for this charge/oxygen review."
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "D02",
+      "split": "development",
+      "kind": "readiness",
+      "title": "Development 2: historical 12h",
+      "source_group": "yu2025-hollow-anode",
+      "lineage": "evaluation/cases.json#historical-12h",
+      "question": "Under the stated A/s/g MRE adapter contract, may measured reconstruction review proceed, or what is missing/unsupported?",
+      "sources": [
+        {
+          "id": "dev-record",
+          "url": "https://ntrs.nasa.gov/citations/20250004626",
+          "locator": "Sections 2.2.1-2.2.2 and Table 2, 12-hour row",
+          "facts": "Published scalar summary only. No underlying traces/calibration receipts acquired. Record absence is about this supplied packet, not an assertion about the original researchers' records."
+        }
+      ],
+      "record": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Yu et al. inverted YSZ/Pt hollow-anode cell, LHS-1 simulant and Mo cathode",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 43200,
+          "duration_unit": "s",
+          "oxygen_mass": 0.749,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": false,
+          "gas_measurement_record": false,
+          "gas_calibration": false,
+          "reference_conditions": false,
+          "measurement_uncertainty": false,
+          "gas_to_mass_documentation": false
+        },
+        "provenance": "Published scalar summary only. No underlying traces/calibration receipts acquired. Record absence is about this supplied packet, not an assertion about the original researchers' records.",
+        "source_url": "https://ntrs.nasa.gov/citations/20250004626",
+        "source_locator": "Sections 2.2.1-2.2.2 and Table 2, 12-hour row",
+        "source_group": "yu2025-hollow-anode",
+        "case_type": "historical-summary",
+        "notes": "Nominal constant current can support conditional arithmetic. It does not establish measured charge or independently calibrated collected gas. No voltage record is mandatory solely for this charge/oxygen review."
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "D03",
+      "split": "development",
+      "kind": "readiness",
+      "title": "Development 3: constructed complete",
+      "source_group": "constructed-metadata-controls",
+      "lineage": "evaluation/cases.json#constructed-complete",
+      "question": "Under the stated A/s/g MRE adapter contract, may measured reconstruction review proceed, or what is missing/unsupported?",
+      "sources": [
+        {
+          "id": "dev-record",
+          "url": null,
+          "locator": "Predeclared software test fixture; not experimental measurements",
+          "facts": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted."
+        }
+      ],
+      "record": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Constructed MRE accounting contract; not a physical reactor experiment",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": true,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "For this controlled record-presence probe, all true flags count as supplied records. This does NOT establish their physical quality. Conditional review is allowed; hardware approval and causal diagnosis are not."
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "D04",
+      "split": "development",
+      "kind": "readiness",
+      "title": "Development 4: constructed missing calibration",
+      "source_group": "constructed-metadata-controls",
+      "lineage": "evaluation/cases.json#constructed-missing-calibration",
+      "question": "Under the stated A/s/g MRE adapter contract, may measured reconstruction review proceed, or what is missing/unsupported?",
+      "sources": [
+        {
+          "id": "dev-record",
+          "url": null,
+          "locator": "Predeclared software test fixture; not experimental measurements",
+          "facts": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted."
+        }
+      ],
+      "record": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Constructed MRE accounting contract; not a physical reactor experiment",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": false,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "For this controlled record-presence probe, all true flags count as supplied records. This does NOT establish their physical quality. Conditional review is allowed; hardware approval and causal diagnosis are not."
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "D05",
+      "split": "development",
+      "kind": "readiness",
+      "title": "Development 5: constructed unsupported unit",
+      "source_group": "constructed-metadata-controls",
+      "lineage": "evaluation/cases.json#constructed-unsupported-unit",
+      "question": "Under the stated A/s/g MRE adapter contract, may measured reconstruction review proceed, or what is missing/unsupported?",
+      "sources": [
+        {
+          "id": "dev-record",
+          "url": null,
+          "locator": "Predeclared software test fixture; not experimental measurements",
+          "facts": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted."
+        }
+      ],
+      "record": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Constructed MRE accounting contract; not a physical reactor experiment",
+        "quantity_inputs": {
+          "current": 500,
+          "current_unit": "mA",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": true,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "For this controlled record-presence probe, all true flags count as supplied records. This does NOT establish their physical quality. Conditional review is allowed; hardware approval and causal diagnosis are not. This pilot adapter supports A, s, g only and cannot silently convert mA."
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "D06",
+      "split": "development",
+      "kind": "readiness",
+      "title": "Development 6: constructed out of scope",
+      "source_group": "constructed-metadata-controls",
+      "lineage": "evaluation/cases.json#constructed-out-of-scope",
+      "question": "Under the stated A/s/g MRE adapter contract, may measured reconstruction review proceed, or what is missing/unsupported?",
+      "sources": [
+        {
+          "id": "dev-record",
+          "url": null,
+          "locator": "Predeclared software test fixture; not experimental measurements",
+          "facts": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted."
+        }
+      ],
+      "record": {
+        "process": "molten_salt_electrolysis_with_carbon_anode",
+        "configuration": "Constructed out-of-scope process; not the oxide-melt hollow-anode case",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": true,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "The provided MRE accounting contract does not support this process. Do not transfer its pathway or causal model."
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "E01",
+      "split": "evaluation",
+      "kind": "source_claim",
+      "title": "Early MRE: ideal charge budget",
+      "source_group": "early-mre-scaleup",
+      "question": "The documented batch used five amperes for eight hours. Compute the ideal four-electron O2 mass in g, assuming constant current; distinguish it from measured collected oxygen.",
+      "sources": [
+        {
+          "id": "source-record",
+          "url": "https://ntrs.nasa.gov/citations/20090018064",
+          "locator": "NTRS abstract (reviewed 28 October 2026)",
+          "facts": "The abstract reports an eight-hour electrolysis batch at five amperes using iridium inert anodes. It does not provide a calibrated total oxygen mass for this batch."
+        }
+      ],
+      "record": {
+        "reported_current_A": 5,
+        "reported_duration_h": 8,
+        "reported_batch": true
+      },
+      "numeric_task": {
+        "kind": "charge",
+        "current_A": 5,
+        "duration_h": 8,
+        "unit": "g"
+      }
+    },
+    {
+      "id": "E02",
+      "split": "evaluation",
+      "kind": "source_claim",
+      "title": "Scale-up objective versus achieved production",
+      "source_group": "early-mre-scaleup",
+      "question": "The abstract establishes that the annual one-metric-ton oxygen production goal was achieved. Also express the stated GOAL as kg/h using a 365-day, 8760-hour year; do not call that a measured rate.",
+      "sources": [
+        {
+          "id": "source-record",
+          "url": "https://ntrs.nasa.gov/citations/20110008524",
+          "locator": "NTRS abstract (reviewed 28 October 2026)",
+          "facts": "The abstract describes a scale-up effort toward a goal of one metric ton O2 per year. It reports experiments up to ten amperes and simulant loads of 500 g to 1 kg. It does not report achievement of that annual goal."
+        }
+      ],
+      "record": {
+        "target_annual_kg": 1000,
+        "goal_reported": true,
+        "achievement_reported": false
+      },
+      "numeric_task": {
+        "kind": "annual_rate",
+        "annual_kg": 1000,
+        "hours_per_year": 8760,
+        "unit": "kg/h"
+      }
+    },
+    {
+      "id": "E03",
+      "split": "evaluation",
+      "kind": "source_claim",
+      "title": "Anode candidate: computation versus qualification",
+      "source_group": "computational-anode-screen",
+      "question": "The reported alloy-screening results were established by completed MRE experimental demonstrations rather than first-principles calculations.",
+      "sources": [
+        {
+          "id": "source-record",
+          "url": "https://ntrs.nasa.gov/citations/20220018934",
+          "locator": "NTRS abstract (reviewed 28 October 2026)",
+          "facts": "The abstract describes first-principles thermodynamic calculations for refractory/platinum-group alloy screening in the presence of Fe and Si. Its final sentence calls for experimental demonstrations of the alloys in an MRE environment. It gives no measured 500-hour alloy lifetime."
+        }
+      ],
+      "record": {
+        "method": "first_principles",
+        "experimental_demonstration_status": "future_work"
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "E04",
+      "split": "evaluation",
+      "kind": "source_claim",
+      "title": "Anode lifetime claim beyond available evidence",
+      "source_group": "computational-anode-screen",
+      "question": "A shortlisted alloy is established to survive 500 hours inside an MRE reactor.",
+      "sources": [
+        {
+          "id": "source-record",
+          "url": "https://ntrs.nasa.gov/citations/20220018934",
+          "locator": "NTRS abstract (reviewed 28 October 2026)",
+          "facts": "The abstract describes first-principles thermodynamic calculations for refractory/platinum-group alloy screening in the presence of Fe and Si. Its final sentence calls for experimental demonstrations of the alloys in an MRE environment. It gives no measured 500-hour alloy lifetime."
+        }
+      ],
+      "record": {
+        "measured_lifetime_h": null,
+        "experimental_demonstration_status": "future_work"
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "E05",
+      "split": "evaluation",
+      "kind": "source_claim",
+      "title": "Plant-model integration interface",
+      "source_group": "mait-plant-model",
+      "question": "The described MAIT framework uses MATLAB/Simulink to integrate subsystem models for the MRE plant.",
+      "sources": [
+        {
+          "id": "source-record",
+          "url": "https://ntrs.nasa.gov/citations/20240012420",
+          "locator": "NTRS abstract (reviewed 28 October 2026)",
+          "facts": "The abstract describes a plant system model spanning excavation to product storage. MAIT integrates subsystem models in MATLAB/Simulink. Total mass, volume and power requirements were computed for plant iterations; these are system-model outputs, not reported operating-plant measurements."
+        }
+      ],
+      "record": {
+        "framework": "MAIT",
+        "integration_environment": "MATLAB/Simulink"
+      },
+      "numeric_task": null
+    },
+    {
+      "id": "E06",
+      "split": "evaluation",
+      "kind": "source_claim",
+      "title": "Plant requirements: computed versus measured",
+      "source_group": "mait-plant-model",
+      "question": "The mass, volume and power requirements described in the abstract came from operating-plant measurements rather than system-model computations.",
+      "sources": [
+        {
+          "id": "source-record",
+          "url": "https://ntrs.nasa.gov/citations/20240012420",
+          "locator": "NTRS abstract (reviewed 28 October 2026)",
+          "facts": "The abstract describes a plant system model spanning excavation to product storage. MAIT integrates subsystem models in MATLAB/Simulink. Total mass, volume and power requirements were computed for plant iterations; these are system-model outputs, not reported operating-plant measurements."
+        }
+      ],
+      "record": {
+        "requirements_origin": "system_model_computation"
+      },
+      "numeric_task": null
+    }
+  ]
+}

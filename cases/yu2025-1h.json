@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0",
+  "case_id": "yu2025-inverted-hollow-anode-1h",
+  "provenance_class": "published_summary",
+  "evaluation_role": "development_only",
+  "question": "What measurements and accounting are needed before interpreting the reported oxygen recovery?",
+  "configuration": "Yu et al. inverted hollow-anode laboratory cell; LHS-1 simulant, YSZ/Pt anode and Mo cathode (main paper sections 2.2.1-2.2.2). Not the KSC LR-1 vacuum reactor.",
+  "evidence": [
+    {
+      "id": "ev-current",
+      "kind": "quantity",
+      "field": "current",
+      "value": 0.5,
+      "unit": "A",
+      "source_id": "yu2025-main",
+      "locator": "Section 2.2.2",
+      "transformation": "Direct transcription of a reported value; no raw data reconstruction",
+      "uncertainty": {
+        "status": "unknown",
+        "value": null
+      },
+      "epistemic_status": "reported"
+    },
+    {
+      "id": "ev-duration",
+      "kind": "quantity",
+      "field": "duration",
+      "value": 3600,
+      "unit": "s",
+      "source_id": "yu2025-main",
+      "locator": "Section 2.2.2 and Table 2, 1-hour row",
+      "transformation": "Reported 1 hour converted to seconds by 1 h = 3600 s",
+      "uncertainty": {
+        "status": "unknown",
+        "value": null
+      },
+      "epistemic_status": "reported"
+    },
+    {
+      "id": "ev-temperature",
+      "kind": "quantity",
+      "field": "temperature",
+      "value": 1600,
+      "unit": "degC",
+      "source_id": "yu2025-main",
+      "locator": "Section 2.2.2",
+      "transformation": "Direct transcription of a reported value; no raw data reconstruction",
+      "uncertainty": {
+        "status": "unknown",
+        "value": null
+      },
+      "epistemic_status": "reported"
+    },
+    {
+      "id": "ev-carrier-flow",
+      "kind": "quantity",
+      "field": "carrier_flow",
+      "value": 100,
+      "unit": "sccm",
+      "source_id": "yu2025-main",
+      "locator": "Section 2.2.2; flowing Ar",
+      "transformation": "Direct transcription of a reported value; no raw data reconstruction",
+      "uncertainty": {
+        "status": "unknown",
+        "value": null
+      },
+      "epistemic_status": "reported"
+    },
+    {
+      "id": "ev-oxygen",
+      "kind": "quantity",
+      "field": "oxygen_mass",
+      "value": 0.07,
+      "unit": "g",
+      "source_id": "yu2025-main",
+      "locator": "Table 2, 1-hour row; PDF page 15 (index 14)",
+      "transformation": "Direct transcription of a reported value; no raw data reconstruction",
+      "uncertainty": {
+        "status": "unknown",
+        "value": null
+      },
+      "epistemic_status": "reported"
+    },
+    {
+      "id": "ev-efficiency",
+      "kind": "quantity",
+      "field": "faradaic_efficiency",
+      "value": 0.47,
+      "unit": "fraction",
+      "source_id": "yu2025-main",
+      "locator": "Table 2, 1-hour row",
+      "transformation": "Reported 47 percent converted to fraction by dividing by 100; this is a reported comparison target, not an independent measurement",
+      "uncertainty": {
+        "status": "unknown",
+        "value": null
+      },
+      "epistemic_status": "reported"
+    },
+    {
+      "id": "ev-collection-limit",
+      "kind": "interpretation",
+      "source_id": "yu2025-main",
+      "locator": "Section 3.1, discussion preceding Table 2",
+      "transformation": "Short attributed paraphrase; no new diagnosis",
+      "epistemic_status": "author_interpretation",
+      "text": "The authors treat the measured oxygen as a lower bound on generation because oxygen formed internally can participate in oxidation products not captured by the outlet analysis."
+    }
+  ],
+  "missing_inputs": [
+    {
+      "id": "raw-traces",
+      "description": "No raw current, gas concentration or voltage time series acquired",
+      "consequence": "Cannot independently integrate measured traces or reconstruct gas production history"
+    },
+    {
+      "id": "gas-calibration",
+      "description": "No underlying gas calibration files or reference-condition receipt acquired",
+      "consequence": "Cannot independently validate gas-to-mass conversion"
+    },
+    {
+      "id": "measurement-uncertainty",
+      "description": "Uncertainty for these transcribed scalars not established in this fixture",
+      "consequence": "No statistical confidence or independently calibrated error bar"
+    }
+  ],
+  "limitations": [
+    "Real published experiment summarized as scalar values, not raw reactor logs",
+    "Reported efficiency derives from related reported quantities and is not independent ground truth",
+    "No calibrated failure label or optimal next-test label",
+    "Historical development case may be familiar to the language model",
+    "Structure/provenance validation is not scientific validation"
+  ]
+}

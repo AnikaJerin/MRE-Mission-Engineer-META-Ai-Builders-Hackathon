@@ -1,0 +1,46 @@
+{
+  "version": "pilot-v1",
+  "scope": "Predeclared record-presence, supported-input and scope labels only; no optimal-test or causal ground truth",
+  "answers": {
+    "historical-3h": {
+      "decision": "request_evidence",
+      "missing_inputs": [
+        "current_record",
+        "gas_measurement_record",
+        "gas_calibration",
+        "reference_conditions",
+        "measurement_uncertainty",
+        "gas_to_mass_documentation"
+      ]
+    },
+    "historical-12h": {
+      "decision": "request_evidence",
+      "missing_inputs": [
+        "current_record",
+        "gas_measurement_record",
+        "gas_calibration",
+        "reference_conditions",
+        "measurement_uncertainty",
+        "gas_to_mass_documentation"
+      ]
+    },
+    "constructed-complete": {
+      "decision": "proceed_conditional_review",
+      "missing_inputs": []
+    },
+    "constructed-missing-calibration": {
+      "decision": "request_evidence",
+      "missing_inputs": [
+        "gas_calibration"
+      ]
+    },
+    "constructed-unsupported-unit": {
+      "decision": "reject_input",
+      "missing_inputs": []
+    },
+    "constructed-out-of-scope": {
+      "decision": "reject_scope",
+      "missing_inputs": []
+    }
+  }
+}

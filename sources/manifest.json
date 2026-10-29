@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "reviewed_on": "2026-10-28",
+  "review_scope": "Primary-source metadata and selected paper sections reviewed; raw datasets not acquired, source files not locally hash-verified, and physics not executed.",
+  "sources": [
+    {
+      "id": "yu2025-main",
+      "title": "Yu et al. (2025), Improving Molten Regolith Electrolysis with Zirconia-Based Hollow Anode Technology",
+      "url": "https://ntrs.nasa.gov/citations/20250004626",
+      "version": "2025 accepted manuscript; NTRS 20250004626",
+      "role": "core_experiment",
+      "format": "PDF",
+      "license": "Public distribution; portions may be copyright protected",
+      "rights_evidence": "https://ntrs.nasa.gov/citations/20250004626",
+      "redistribution": "Link and attribute factual records; do not bundle PDF or figures without checking applicable terms",
+      "limitations": [
+        "Published summary and figures, not verified raw telemetry",
+        "Results apply to the study configuration",
+        "Reported oxygen may be a lower bound on total generation"
+      ],
+      "download_urls": [
+        "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf"
+      ],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "yu2025-supplement",
+      "title": "Yu et al. (2025), hollow-anode supplementary material",
+      "url": "https://ntrs.nasa.gov/citations/20250004626",
+      "version": "Supplement accompanying NTRS 20250004626",
+      "role": "supporting",
+      "format": "PDF figures",
+      "license": "Public download; confirm component reuse rights",
+      "rights_evidence": "https://ntrs.nasa.gov/citations/20250004626",
+      "redistribution": "Do not assume source figures may be relicensed with project code",
+      "limitations": [
+        "Characterization figures are not a general labelled fault dataset"
+      ],
+      "download_urls": [
+        "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_supplementary%20material_clean.pdf"
+      ],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "astromat-lunar",
+      "title": "Team Astromat, Lunar samples v.1 February 2025",
+      "url": "https://repo.astromat.org/view.php?id=3696&system=astro",
+      "version": "DOI 10.60520/IEDA/113696; version 1.0",
+      "role": "core_chemistry",
+      "format": "CSV / text",
+      "license": "CC BY 4.0 (DataCite rights metadata)",
+      "rights_evidence": "https://api.datacite.org/dois/10.60520/IEDA/113696",
+      "redistribution": "Retain attribution, DOI and analytical references; identify transformations",
+      "limitations": [
+        "Bulk chemistry, not reactor operating outcomes",
+        "User-estimated 219.6 MB not independently verified",
+        "CSV rows and a compatible analysis subset have not yet been inspected"
+      ],
+      "download_urls": [],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "astromat-meteorites",
+      "title": "Team Astromat, Lunar meteorite samples v.1 February 2025",
+      "url": "https://repo.astromat.org/view.php?id=3699&system=astro",
+      "version": "DOI 10.60520/IEDA/113699; version 1.0",
+      "role": "optional",
+      "format": "CSV / text",
+      "license": "CC BY 4.0 (DataCite rights metadata)",
+      "rights_evidence": "https://api.datacite.org/dois/10.60520/IEDA/113699",
+      "redistribution": "Retain attribution and source-analysis references",
+      "limitations": [
+        "Portal lists 58.72 MB; not an acquired byte count",
+        "Meteorite composition is not a specific reactor simulant measurement"
+      ],
+      "download_urls": [],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "regolith-db-2026",
+      "title": "Gasteiner, Murdoch and D'Angelo, Dataset for the Lunar Regolith Database",
+      "url": "https://doi.org/10.57745/NTSZ8G",
+      "version": "2026; version 2",
+      "role": "optional",
+      "format": "CSV / TAB / ZIP, approximately 1 MB",
+      "license": "Etalab Open Licence 2.0",
+      "rights_evidence": "https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi%3A10.57745%2FNTSZ8G",
+      "redistribution": "Preserve attribution and actual license terms",
+      "limitations": [
+        "Physical/geotechnical properties, not validated molten-electrolyte corrosion or oxygen-yield data"
+      ],
+      "download_urls": [],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "nasa-lunar-data",
+      "title": "NASA NSSDCA Lunar Data Project",
+      "url": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_data/",
+      "version": "Historical Apollo/ALSEP restoration catalog",
+      "role": "optional",
+      "format": "Scans / tables / CDF; variable size",
+      "license": "Inspect individual product terms",
+      "rights_evidence": "https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_data/",
+      "redistribution": "No blanket redistribution assertion; select products individually",
+      "limitations": [
+        "Not MRE reactor telemetry",
+        "Bulk acquisition is unnecessary for this MVP"
+      ],
+      "download_urls": [],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "ksc2025-core-poster",
+      "title": "Meier et al., Molten Regolith Electrolysis Testing Performed in Vacuum at Kennedy Space Center: Analysis of the Retrieved Core Sample",
+      "url": "https://ntrs.nasa.gov/citations/20250004983",
+      "version": "2025 LSIC poster",
+      "role": "supporting",
+      "format": "PDF poster",
+      "license": "Record states use by or on behalf of US Government permitted",
+      "rights_evidence": "https://ntrs.nasa.gov/citations/20250004983",
+      "redistribution": "Check rights before bundling; public access is not blanket reuse permission",
+      "limitations": [
+        "Different reactor context; do not pool with the hollow-anode case",
+        "Not a verified raw telemetry download"
+      ],
+      "download_urls": [],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    },
+    {
+      "id": "oxide-properties",
+      "title": "Humbert, OxideProperties research code",
+      "url": "https://github.com/MrMattHumbert/OxideProperties",
+      "version": "Commit not pinned; disabled pending review",
+      "role": "optional",
+      "format": "Python / MATLAB code",
+      "license": "Repository advertises MIT; inspect exact license before importing",
+      "rights_evidence": "https://github.com/MrMattHumbert/OxideProperties/blob/main/LICENSE",
+      "redistribution": "Preserve license; pin commit and validate models before use",
+      "limitations": [
+        "Not installed or executed",
+        "Not a complete reactor or failure model",
+        "Units and validity domains require implementation review"
+      ],
+      "download_urls": [],
+      "acquisition": "metadata_reviewed_files_not_acquired"
+    }
+  ]
+}

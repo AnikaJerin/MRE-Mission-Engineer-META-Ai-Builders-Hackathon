@@ -1,0 +1,18 @@
+{
+  "version": "pilot-v1",
+  "name": "pilot-v4",
+  "created_at": "2026-10-28T11:15:45.068657+00:00",
+  "hashes": {
+    "evaluation/cases.json": "5a3faae17b124378c8763322a4770933498f5f9e61185cbc629536f29ee5f4ff",
+    "evaluation/answer_key.json": "245c7a8ddb020408bf955f21a7a8f6f97fea5b8e32e9b315e19155444250b246",
+    "evaluation/PROTOCOL.md": "ccd32e967000f09cfdf84b7d933125be93201588a399d4492ad215e62925c254",
+    "code/evaluation.py": "a71d1e7e324e3e211523376ef8a51a7735fc15809a80652958f75f388c6c945c",
+    "code/agent_contracts.py": "9b5b24178582b775976805212e6f2f2254e3eca5f2c7f4e313c19b907806533a",
+    "code/meta_client.py": "5bc000bb120ecdee16577733118158613e2b67a2a4bbafca406a62a4d3e96aee",
+    "code/api_budget.py": "4dfb82e0f3e62e2070d341c0307c3691c2fd6d9fd2e8545b8baa6f9f031bcd13",
+    "code/physics.py": "95f94a4b0dc1a212c8dd15106522f2710e14bf460fa031fbd7a40fdece6122a6",
+    "code/evidence.py": "2c542cc375a1ebe4d8260625d81b15699f2eaa9b9d6782f3305103aaeb0be4af",
+    "local-main-paper": "ba46da63295be1cf1774bc268b6a63b632a199a61f1f8d663449676bc96b3ab5"
+  },
+  "sha256": "20572da4ba31b09609e4fe6f6b03e2ed61402985b96b9491e397dc79705423fa"
+}

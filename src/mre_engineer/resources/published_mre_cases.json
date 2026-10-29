@@ -1,0 +1,14 @@
+{
+  "version":"yu2025-tables-2-4-5-v1",
+  "reviewed_on":"2026-10-29",
+  "source_url":"https://ntrs.nasa.gov/citations/20250004626",
+  "source_id":"yu-materials",
+  "kind":"published_summary_observations",
+  "applicability":{"configuration":"hollow_ysz_pt","feedstock":"LHS-1","temperature_C":1600,"current_A":0.5},
+  "scope":"Published scalar observations, not raw telemetry, healthy acceptance values, or fault-labelled reactor ground truth. Printed wall-loss ± conventions are retained without inferring confidence intervals.",
+  "cases":[
+    {"id":"yu2025-1h","locator":"Table 2 one-hour row; Table 4 first row; Table 5 one-hour row","duration_h":1,"thermal_exposure_h":3,"collected_o2_g":0.070,"initial_resistance_ohm":1.54,"final_resistance_ohm":1.44,"wall_loss_um":22,"wall_loss_printed_bound_um":10},
+    {"id":"yu2025-3h","locator":"Table 2 three-hour row; Table 4 second row; Table 5 three-hour row","duration_h":3,"thermal_exposure_h":5,"collected_o2_g":0.237,"initial_resistance_ohm":1.59,"final_resistance_ohm":1.12,"wall_loss_um":54,"wall_loss_printed_bound_um":12},
+    {"id":"yu2025-12h","locator":"Table 2 twelve-hour row; Table 4 third row; Table 5 twelve-hour row","duration_h":12,"thermal_exposure_h":14,"collected_o2_g":0.749,"initial_resistance_ohm":1.46,"final_resistance_ohm":0.78,"wall_loss_um":85,"wall_loss_printed_bound_um":19}
+  ]
+}

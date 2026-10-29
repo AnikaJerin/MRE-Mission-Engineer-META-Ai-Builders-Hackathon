@@ -1,0 +1,180 @@
+{
+  "version": "pilot-v1",
+  "role": "development-stress-pilot-not-independent-validation",
+  "cases": [
+    {
+      "case_id": "historical-3h",
+      "packet": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Yu et al. inverted YSZ/Pt hollow-anode cell, LHS-1 simulant and Mo cathode",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 10800,
+          "duration_unit": "s",
+          "oxygen_mass": 0.237,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": false,
+          "gas_measurement_record": false,
+          "gas_calibration": false,
+          "reference_conditions": false,
+          "measurement_uncertainty": false,
+          "gas_to_mass_documentation": false
+        },
+        "provenance": "Published scalar summary only. No underlying traces/calibration receipts acquired. Record absence is about this supplied packet, not an assertion about the original researchers' records.",
+        "source_url": "https://ntrs.nasa.gov/citations/20250004626",
+        "source_locator": "Sections 2.2.1-2.2.2 and Table 2, 3-hour row",
+        "source_group": "yu2025-hollow-anode",
+        "case_type": "historical-summary",
+        "notes": "Nominal constant current can support conditional arithmetic. It does not establish measured charge or independently calibrated collected gas. No voltage record is mandatory solely for this charge/oxygen review."
+      }
+    },
+    {
+      "case_id": "historical-12h",
+      "packet": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Yu et al. inverted YSZ/Pt hollow-anode cell, LHS-1 simulant and Mo cathode",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 43200,
+          "duration_unit": "s",
+          "oxygen_mass": 0.749,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": false,
+          "gas_measurement_record": false,
+          "gas_calibration": false,
+          "reference_conditions": false,
+          "measurement_uncertainty": false,
+          "gas_to_mass_documentation": false
+        },
+        "provenance": "Published scalar summary only. No underlying traces/calibration receipts acquired. Record absence is about this supplied packet, not an assertion about the original researchers' records.",
+        "source_url": "https://ntrs.nasa.gov/citations/20250004626",
+        "source_locator": "Sections 2.2.1-2.2.2 and Table 2, 12-hour row",
+        "source_group": "yu2025-hollow-anode",
+        "case_type": "historical-summary",
+        "notes": "Nominal constant current can support conditional arithmetic. It does not establish measured charge or independently calibrated collected gas. No voltage record is mandatory solely for this charge/oxygen review."
+      }
+    },
+    {
+      "case_id": "constructed-complete",
+      "packet": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Constructed MRE accounting contract; not a physical reactor experiment",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": true,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "For this controlled record-presence probe, all true flags count as supplied records. This does NOT establish their physical quality. Conditional review is allowed; hardware approval and causal diagnosis are not."
+      }
+    },
+    {
+      "case_id": "constructed-missing-calibration",
+      "packet": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Constructed MRE accounting contract; not a physical reactor experiment",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": false,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "For this controlled record-presence probe, all true flags count as supplied records. This does NOT establish their physical quality. Conditional review is allowed; hardware approval and causal diagnosis are not."
+      }
+    },
+    {
+      "case_id": "constructed-unsupported-unit",
+      "packet": {
+        "process": "molten_regolith_electrolysis",
+        "configuration": "Constructed MRE accounting contract; not a physical reactor experiment",
+        "quantity_inputs": {
+          "current": 500,
+          "current_unit": "mA",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": true,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "For this controlled record-presence probe, all true flags count as supplied records. This does NOT establish their physical quality. Conditional review is allowed; hardware approval and causal diagnosis are not. This pilot adapter supports A, s, g only and cannot silently convert mA."
+      }
+    },
+    {
+      "case_id": "constructed-out-of-scope",
+      "packet": {
+        "process": "molten_salt_electrolysis_with_carbon_anode",
+        "configuration": "Constructed out-of-scope process; not the oxide-melt hollow-anode case",
+        "quantity_inputs": {
+          "current": 0.5,
+          "current_unit": "A",
+          "duration": 3600,
+          "duration_unit": "s",
+          "oxygen_mass": 0.07,
+          "oxygen_mass_unit": "g"
+        },
+        "available_records": {
+          "current_record": true,
+          "gas_measurement_record": true,
+          "gas_calibration": true,
+          "reference_conditions": true,
+          "measurement_uncertainty": true,
+          "gas_to_mass_documentation": true
+        },
+        "provenance": "Entirely constructed record-presence metadata and scalar inputs for a controlled software decision probe. No real calibration or laboratory validation is asserted.",
+        "source_url": null,
+        "source_locator": "Predeclared software test fixture; not experimental measurements",
+        "source_group": "constructed-metadata-controls",
+        "case_type": "constructed-contract-case",
+        "notes": "The provided MRE accounting contract does not support this process. Do not transfer its pathway or causal model."
+      }
+    }
+  ]
+}

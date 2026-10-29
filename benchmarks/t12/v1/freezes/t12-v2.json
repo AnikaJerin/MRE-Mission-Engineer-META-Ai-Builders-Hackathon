@@ -1,0 +1,20 @@
+{
+  "name": "t12-v2",
+  "created_at": "2026-10-28T16:55:02.101938+00:00",
+  "hashes": {
+    "benchmarks/t12/v1/cases.json": "ad718ab5e303e416702ad4a81c1f00773f377f941dd3715b0476e47f4305251e",
+    "benchmarks/t12/v1/reference_key.json": "ab99a6352d45ddb903afb69b39dbf9aaae771a5be7319cff312128b06439e71d",
+    "benchmarks/t12/v1/PROTOCOL.md": "e1da9b1ec156065056cc8c29eb5e1043042a2a2962166d8fd549cb65a78d89bb",
+    "benchmarks/t12/v1/SOURCES.md": "0198e3f88e26541853d825f8d5a59cc423dc9d3a981e49d43b2025e29cb8fa60",
+    "code/validation_suite.py": "5e0392cd895a7ba809c53b579acef3a55d5de1f7dfea051d627f3e3ebf395685",
+    "code/suite_references.py": "3d05ee88dd9e724e46138a731d30b0d3a8249c0be2c695330731258d2cc16761",
+    "code/physics.py": "95f94a4b0dc1a212c8dd15106522f2710e14bf460fa031fbd7a40fdece6122a6",
+    "code/meta_client.py": "5bc000bb120ecdee16577733118158613e2b67a2a4bbafca406a62a4d3e96aee",
+    "code/api_budget.py": "4dfb82e0f3e62e2070d341c0307c3691c2fd6d9fd2e8545b8baa6f9f031bcd13",
+    "code/evaluation.py": "a71d1e7e324e3e211523376ef8a51a7735fc15809a80652958f75f388c6c945c",
+    "code/agent_contracts.py": "9b5b24178582b775976805212e6f2f2254e3eca5f2c7f4e313c19b907806533a",
+    "code/evidence.py": "2c542cc375a1ebe4d8260625d81b15699f2eaa9b9d6782f3305103aaeb0be4af",
+    "code/investigation.py": "dea3e6f27add3816033580869841417dbbc9a15366530890a646dc784a6ff019"
+  },
+  "sha256": "31fb41cfe66bd6e352ff134ab77bbb9f00bb22c33427ca4643e0a735d638a2aa"
+}

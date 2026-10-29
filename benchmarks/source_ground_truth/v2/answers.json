@@ -1,0 +1,33 @@
+{
+  "version": "source-answers-v1",
+  "answers": {
+    "thermal-clock": {
+      "evidence_status": "supported",
+      "reference_value": 14.0,
+      "reference_unit": "h",
+      "absolute_tolerance": 0.001,
+      "locator": "Yu Table 4"
+    },
+    "resistance-change": {
+      "evidence_status": "contradicted",
+      "reference_value": -46.6,
+      "reference_unit": "percent",
+      "absolute_tolerance": 0.15,
+      "locator": "Yu Table 5; tolerance covers printed rounding"
+    },
+    "lifetime-status": {
+      "evidence_status": "contradicted",
+      "reference_value": null,
+      "reference_unit": "not_applicable",
+      "absolute_tolerance": 0.0,
+      "locator": "Yu Section 4.4 explicitly identifies extrapolation assumptions"
+    },
+    "rate-comparison": {
+      "evidence_status": "not_established",
+      "reference_value": null,
+      "reference_unit": "not_applicable",
+      "absolute_tolerance": 0.0,
+      "locator": "Related KSC summaries do not supply matched intervals/calibration to identify degradation"
+    }
+  }
+}

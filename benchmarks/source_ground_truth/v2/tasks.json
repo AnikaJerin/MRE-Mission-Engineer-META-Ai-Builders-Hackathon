@@ -1,0 +1,94 @@
+{
+  "version": "source-tasks-v1",
+  "tasks": [
+    {
+      "id": "thermal-clock",
+      "source_group": "yu2025-hollow-anode",
+      "constructed_claim": "The 12-hour electrolysis specimen had 14 hours of thermal exposure at 1600 C.",
+      "question": "Is the claim supported? Return the documented thermal exposure in hours as reference_value.",
+      "record": {
+        "electrolysis_h": 12,
+        "thermal_exposure_h": 14,
+        "wall_recession_um": 85,
+        "printed_plus_minus_um": 19,
+        "claimed_thermal_exposure_h": 14,
+        "temperature_C": 1600,
+        "claimed_temperature_C": 1600
+      },
+      "receipt": {
+        "id": "yu-table4",
+        "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+        "locator": "Table 4, manuscript page 24",
+        "type": "published_experimental_table",
+        "note": "Table 4 header specifies time at 1600 C. Thermal exposure and electrolysis duration are separate clocks. Printed plus/minus is not automatically a confidence interval."
+      },
+      "check": "exposure"
+    },
+    {
+      "id": "resistance-change",
+      "source_group": "yu2025-hollow-anode",
+      "constructed_claim": "The 12-hour cell resistance increased during electrolysis.",
+      "question": "Is the claim supported? Return 100*(final-initial)/initial in percent as reference_value.",
+      "record": {
+        "initial_ohm": 1.46,
+        "final_ohm": 0.78,
+        "published_percent_change": -46.6,
+        "electrolysis_h": 12,
+        "temperature_C": 1600
+      },
+      "receipt": {
+        "id": "yu-table5",
+        "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+        "locator": "Table 5, manuscript page 28",
+        "type": "published_experimental_table",
+        "note": "Table 5 identifies the 12-hour row and resistance at 1600 C before/after electrolysis. Resistance change alone does not establish a unique causal mechanism."
+      },
+      "check": "percent_change"
+    },
+    {
+      "id": "lifetime-status",
+      "source_group": "yu2025-hollow-anode",
+      "constructed_claim": "An anode lifetime of approximately 214 hours was experimentally demonstrated and qualifies the reactor for that duration.",
+      "question": "Is the claim supported? No numerical calculation is requested; reference_value must be null.",
+      "record": {
+        "experimental_electrolysis_h": 12,
+        "projected_operational_h": 214,
+        "projection_assumptions": [
+          "constant oxygen production rate",
+          "constant wall recession rate"
+        ],
+        "projection_status": "extrapolation_requires_further_testing"
+      },
+      "receipt": {
+        "id": "yu-life",
+        "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+        "locator": "Sections 4.2 and 4.4, manuscript pages 32-33",
+        "type": "author_projection",
+        "note": "Projected service life is not a measured endurance test or hardware qualification."
+      },
+      "check": "projection_status"
+    },
+    {
+      "id": "rate-comparison",
+      "source_group": "ksc-lr1-dec2024",
+      "constructed_claim": "The two reported oxygen production rates prove that the reactor degraded.",
+      "question": "Is that causal conclusion established by the supplied summaries? No numerical calculation is requested; reference_value must be null.",
+      "record": {
+        "poster2025_kg_h": 0.1,
+        "abstract2026_kg_h": 0.07,
+        "matched_averaging_windows_supplied": false,
+        "matched_calibration_records_supplied": false
+      },
+      "receipt": {
+        "id": "ksc-rates",
+        "url": "https://ntrs.nasa.gov/citations/20260006167",
+        "locator": "2026 NTRS abstract; compared with 2025 poster Background",
+        "type": "related_publication_summaries",
+        "additional_url": "https://ntrs.nasa.gov/api/citations/20250004983/downloads/LSIC_MRE_Core_2x3.pdf",
+        "note": "Related LR-1 reports, not independent trials. Why the reported rates differ is not resolved by these summaries."
+      },
+      "check": "comparability"
+    }
+  ],
+  "dataset_revision": "v2-context-complete"
+}

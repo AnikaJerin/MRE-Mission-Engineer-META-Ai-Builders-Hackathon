@@ -1,0 +1,226 @@
+{
+  "version": "engineering-cases-v1",
+  "scope": "Two public-source engineering evidence investigations, not two prospective reactor trials. Review claims are constructed; measurements are attributed published values.",
+  "cases": [
+    {
+      "id": "hollow-anode-review",
+      "title": "Hollow-anode oxygen accounting and material-performance review",
+      "source_group": "yu2025-hollow-anode",
+      "question": "Review oxygen accounting and material-performance evidence for the 12-hour cell. Identify which supplied claims survive the evidence, which mechanisms remain alternatives, and what evidence should be acquired next before endorsing lifetime or efficiency conclusions.",
+      "configuration": "Yu et al. 2025 inverted hollow-anode laboratory cell, LHS-1, YSZ/Pt anode and Mo cathode. Not KSC LR-1.",
+      "observations": {
+        "current_A": 0.5,
+        "electrolysis_h": 12,
+        "thermal_exposure_h": 14,
+        "temperature_C": 1600,
+        "collected_o2_g": 0.749,
+        "initial_resistance_ohm": 1.46,
+        "final_resistance_ohm": 0.78,
+        "wall_recession_um": 85,
+        "wall_recession_printed_plus_minus_um": 19,
+        "projected_lifetime_h": 214
+      },
+      "sources": [
+        {
+          "id": "yu-operation",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+          "locator": "Section 2.2.2; Table 2",
+          "facts": "Nominal constant current 0.5 A; 12-hour electrolysis; collected/reported oxygen mass 0.749 g. These scalars are not a raw current or calibrated outlet-flow trace."
+        },
+        {
+          "id": "yu-collection",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+          "locator": "Section 3.1, manuscript page 14",
+          "facts": "Authors treat measured outlet oxygen as a lower bound, discussing internal oxygen production, Mo oxidation and condensed products outside the sampled gas. This is a source-specific interpretation, not a measured loss fraction."
+        },
+        {
+          "id": "yu-resistance",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+          "locator": "Table 5, manuscript page 28; Section 3.5.2",
+          "facts": "At 1600 C, 12-hour-cell resistance changes from 1.46 to 0.78 ohm. Authors discuss electronic conductivity in YSZ; decreasing electrical resistance is not itself a measurement of improved oxygen collection efficiency."
+        },
+        {
+          "id": "yu-wall",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+          "locator": "Table 4, manuscript page 24",
+          "facts": "12 hours electrolysis corresponds to 14 hours at 1600 C; wall recession 85 +/- 19 micrometres. Preserve the two time bases and printed uncertainty notation; do not assume a confidence level."
+        },
+        {
+          "id": "yu-projection",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004626/downloads/MRE_paper_revision_clean.pdf",
+          "locator": "Sections 4.2 and 4.4, manuscript pages 32-33",
+          "facts": "Approximately 214-hour service life is an extrapolation using constant production/recession assumptions, not a 214-hour endurance experiment. Further testing is required."
+        }
+      ],
+      "review_claims": [
+        {
+          "id": "Y1",
+          "text": "The 12-hour electrolysis specimen experienced 14 hours at 1600 C."
+        },
+        {
+          "id": "Y2",
+          "text": "The 12-hour cell resistance increased from its initial value."
+        },
+        {
+          "id": "Y3",
+          "text": "The approximately 214-hour lifetime was demonstrated by an endurance test."
+        },
+        {
+          "id": "Y4",
+          "text": "The authors report the outlet measurement as a complete oxygen-generation balance, rather than a lower bound."
+        },
+        {
+          "id": "Y5",
+          "text": "The resistance decrease alone proves that oxygen-collection efficiency improved."
+        },
+        {
+          "id": "Y6",
+          "text": "The authors treat measured outlet oxygen as a lower bound rather than an independently closed total-generation balance."
+        }
+      ],
+      "tools": [
+        "oxygen_charge",
+        "resistance_change",
+        "source_context"
+      ],
+      "calculations": [
+        {
+          "id": "ideal_o2_g",
+          "unit": "g",
+          "source_refs": [
+            "yu-operation"
+          ]
+        },
+        {
+          "id": "resistance_change_percent",
+          "unit": "percent",
+          "source_refs": [
+            "yu-resistance"
+          ]
+        }
+      ],
+      "missing_records": [
+        "Raw current and gas/flow histories",
+        "Gas calibration and reference conditions",
+        "Applicable uncertainty and replicate measurements",
+        "Long-duration endurance evidence for lifetime claims"
+      ],
+      "limits": [
+        "Published development source already inspected; not a blind holdout",
+        "Four-electron charge bound is conditional arithmetic, not an independently predicted oxygen yield",
+        "No kinetic, corrosion-lifetime or calibrated fault-probability model"
+      ],
+      "rights": "NTRS notes portions may be copyright protected. Attribute factual transcriptions; do not redistribute source PDF/figures without applicable rights review."
+    },
+    {
+      "id": "lr1-core-review",
+      "title": "LR-1 core characterization and oxygen-report comparability review",
+      "source_group": "ksc-lr1-dec2024",
+      "question": "Review post-test core characterization and related production summaries. Separate what was observed from analytical limitations and unresolved causal claims. Draft the next evidence request without transferring hollow-anode lifetime claims to LR-1.",
+      "configuration": "KSC ASSIST/Lunar Resources LR-1 December 2024 vacuum demonstration and retrieved core. Related 2025 poster and 2026 NTRS abstract are not independent trials.",
+      "observations": {
+        "simulant_mass_kg": 25,
+        "poster_rate_kg_h": 0.1,
+        "abstract_rate_kg_h": 0.07,
+        "core_Nb_atom_percent": 10.09,
+        "core_Nb_printed_std_dev": 7.32,
+        "reported_core_macroporosity_percent": 14.84,
+        "matched_averaging_windows_supplied": false,
+        "matched_calibration_records_supplied": false
+      },
+      "sources": [
+        {
+          "id": "ksc-2025",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004983/downloads/LSIC_MRE_Core_2x3.pdf",
+          "locator": "Background and Summary",
+          "facts": "Poster describes 25 kg of ICN-LHT-1G simulant processed in vacuum and reports average oxygen production around 0.1 kg/h. Retrieved-core characterization reports anode-material degradation observations. This is different hardware from the Yu hollow-anode cell."
+        },
+        {
+          "id": "ksc-composition",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004983/downloads/LSIC_MRE_Core_2x3.pdf",
+          "locator": "Core Slice Average table, heading Atom/Mol%",
+          "facts": "Core-slice average Nb is printed as 10.09 under Atom/Mol%, with printed standard deviation 7.32. This basis is not weight percent; local heterogeneous core analysis is not an entire-batch composition assay."
+        },
+        {
+          "id": "ksc-xps",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004983/downloads/LSIC_MRE_Core_2x3.pdf",
+          "locator": "Summary, XPS bullet",
+          "facts": "The poster explicitly reports XPS scans as inconclusive and proposes an explanation involving Nb/x-ray absorption. That proposed explanation is not a validated universal cause."
+        },
+        {
+          "id": "ksc-porosity",
+          "url": "https://ntrs.nasa.gov/api/citations/20250004983/downloads/LSIC_MRE_Core_2x3.pdf",
+          "locator": "Summary porosity bullet; Computed Tomography section",
+          "facts": "Poster reports approximately 14.84% macroporosity. Its Summary attributes the estimate to EDS, whereas the CT section describes graphically estimating macroporosity by summing slice void space. Retain this attribution ambiguity instead of silently choosing a method."
+        },
+        {
+          "id": "ksc-2026",
+          "url": "https://ntrs.nasa.gov/citations/20260006167",
+          "locator": "NTRS abstract, acquired July 12, 2026",
+          "facts": "Abstract describes LR-1 processing 25 kg with approximately 0.07 kg/h average oxygen production over 9 hours of electrolysis. Slide download not verified in this packet. Matched averaging windows/calibration connecting this value with the poster's 0.1 kg/h are not supplied."
+        }
+      ],
+      "review_claims": [
+        {
+          "id": "K1",
+          "text": "The core-slice table reports Nb as 10.09 on an Atom/Mol% basis."
+        },
+        {
+          "id": "K2",
+          "text": "The reported Nb value is therefore 10.09 weight percent."
+        },
+        {
+          "id": "K3",
+          "text": "The poster reports XPS scans as conclusive."
+        },
+        {
+          "id": "K4",
+          "text": "The poster attributes macroporosity to CT consistently and never mentions EDS as the estimation method."
+        },
+        {
+          "id": "K5",
+          "text": "The two production-rate summaries alone establish reactor degradation."
+        },
+        {
+          "id": "K6",
+          "text": "The KSC poster documents observations attributed to anode degradation in the retrieved core."
+        }
+      ],
+      "tools": [
+        "composition_basis",
+        "rate_comparison",
+        "source_context"
+      ],
+      "calculations": [
+        {
+          "id": "reported_rate_difference_kg_h",
+          "unit": "kg/h",
+          "source_refs": [
+            "ksc-2025",
+            "ksc-2026"
+          ]
+        },
+        {
+          "id": "reported_rate_ratio_percent",
+          "unit": "percent",
+          "source_refs": [
+            "ksc-2025",
+            "ksc-2026"
+          ]
+        }
+      ],
+      "missing_records": [
+        "Matched reporting/averaging windows and gas calibration",
+        "Spatial/core representativeness and repeat characterization",
+        "Clarification of conflicting porosity-method descriptions",
+        "Independent degradation diagnostics for a production-rate causal claim"
+      ],
+      "limits": [
+        "Related KSC publications grouped as one test family",
+        "Summary-rate arithmetic is not a time-series degradation measurement",
+        "XPS failure mechanism and next-experiment optimality are not established"
+      ],
+      "rights": "Poster has a restricted NTRS reuse notice; link and attribute facts. 2026 NTRS record states Public Use Permitted. No source figures are bundled."
+    }
+  ]
+}

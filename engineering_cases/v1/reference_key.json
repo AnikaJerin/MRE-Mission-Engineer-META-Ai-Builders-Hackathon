@@ -1,0 +1,101 @@
+{
+  "version": "engineering-reference-v1",
+  "scope": "Source-bounded claim labels and required reference blocks, not causal fault labels or optimal experiment answers.",
+  "cases": {
+    "hollow-anode-review": {
+      "Y1": {
+        "status": "supported",
+        "required_refs": [
+          "yu-wall"
+        ],
+        "basis": "Table 4 distinguishes electrolysis and thermal exposure."
+      },
+      "Y2": {
+        "status": "contradicted",
+        "required_refs": [
+          "yu-resistance"
+        ],
+        "basis": "Table 5 final resistance is below initial."
+      },
+      "Y3": {
+        "status": "contradicted",
+        "required_refs": [
+          "yu-projection"
+        ],
+        "basis": "214-hour lifetime is explicitly projected, not measured endurance."
+      },
+      "Y4": {
+        "status": "contradicted",
+        "required_refs": [
+          "yu-collection"
+        ],
+        "basis": "Source treats outlet oxygen as a lower bound, not a complete measured balance."
+      },
+      "Y5": {
+        "status": "not_established",
+        "required_refs": [
+          "yu-resistance"
+        ],
+        "basis": "Resistance measurement alone does not identify oxygen collection efficiency improvement."
+      },
+      "Y6": {
+        "status": "supported",
+        "required_refs": [
+          "yu-collection"
+        ],
+        "basis": "Attribution to authors' stated lower-bound interpretation; not independent validation."
+      }
+    },
+    "lr1-core-review": {
+      "K1": {
+        "status": "supported",
+        "required_refs": [
+          "ksc-composition"
+        ],
+        "basis": "Printed table heading and Nb row."
+      },
+      "K2": {
+        "status": "contradicted",
+        "required_refs": [
+          "ksc-composition"
+        ],
+        "basis": "Atom/Mol% is not wt%."
+      },
+      "K3": {
+        "status": "contradicted",
+        "required_refs": [
+          "ksc-xps"
+        ],
+        "basis": "Poster explicitly describes scans as inconclusive."
+      },
+      "K4": {
+        "status": "contradicted",
+        "required_refs": [
+          "ksc-porosity"
+        ],
+        "basis": "The Summary explicitly mentions EDS, refuting the claim that EDS is never mentioned; the CT body supplies a different description. This does not establish which method was actually used."
+      },
+      "K5": {
+        "status": "not_established",
+        "required_refs": [
+          "ksc-2025",
+          "ksc-2026"
+        ],
+        "basis": "Different summaries lack matched interval/calibration basis to establish degradation."
+      },
+      "K6": {
+        "status": "supported",
+        "required_refs": [
+          "ksc-2025"
+        ],
+        "basis": "Correct attribution to reported core observations, not validation of oxygen-rate causality."
+      }
+    }
+  },
+  "numeric_absolute_tolerances": {
+    "ideal_o2_g": 0.002,
+    "resistance_change_percent": 0.15,
+    "reported_rate_difference_kg_h": 0.001,
+    "reported_rate_ratio_percent": 0.1
+  }
+}

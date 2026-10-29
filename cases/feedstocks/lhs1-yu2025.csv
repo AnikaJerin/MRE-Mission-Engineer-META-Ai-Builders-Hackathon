@@ -1,0 +1,11 @@
+analysis_id,material,oxide,value,unit,uncertainty_status,source_id,locator
+yu2025-table1-lhs1,LHS-1,SiO2,51.2,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,FeO,2.7,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,MgO,1.6,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,CaO,12.8,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,Al2O3,26.6,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,TiO2,0.6,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,Na2O,2.9,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,K2O,0.5,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,MnO,0.1,wt_percent,unknown,yu2025-main,Table 1
+yu2025-table1-lhs1,LHS-1,P2O5,0.1,wt_percent,unknown,yu2025-main,Table 1

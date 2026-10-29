@@ -1,0 +1,18 @@
+{
+  "name": "sources-v2",
+  "created_at": "2026-10-28T13:07:20.326929+00:00",
+  "hashes": {
+    "benchmarks/source_ground_truth/v2/tasks.json": "0d1283d49e06eb2a3fadc4670ad36767373be6ce9840691aeadc81071b255ffe",
+    "benchmarks/source_ground_truth/v2/answers.json": "7b0f45ec08d4b840a7a0272c843e88d723713fc26425b8f7e08ea678f6903c9c",
+    "benchmarks/source_ground_truth/v2/catalog.json": "ca0daca8fce9a0a6446f7bb548545a8b203cb3758af5f711ec080eccb023a433",
+    "benchmarks/source_ground_truth/v2/PROTOCOL.md": "6e214269baf06358b951b663b33535fc1194f44d1d944ecbb4a6244ff0057ff3",
+    "code/source_benchmark.py": "b2d5b1cbf470e36fe1fd9a477121286d1b61c8ca41cff59a2b4da4bf5f7e6549",
+    "code/evaluation.py": "a71d1e7e324e3e211523376ef8a51a7735fc15809a80652958f75f388c6c945c",
+    "code/meta_client.py": "5bc000bb120ecdee16577733118158613e2b67a2a4bbafca406a62a4d3e96aee",
+    "code/api_budget.py": "4dfb82e0f3e62e2070d341c0307c3691c2fd6d9fd2e8545b8baa6f9f031bcd13",
+    "code/agent_contracts.py": "9b5b24178582b775976805212e6f2f2254e3eca5f2c7f4e313c19b907806533a",
+    "code/evidence.py": "2c542cc375a1ebe4d8260625d81b15699f2eaa9b9d6782f3305103aaeb0be4af",
+    "code/investigation.py": "dea3e6f27add3816033580869841417dbbc9a15366530890a646dc784a6ff019"
+  },
+  "sha256": "95968f11f9c71808821bdb1e19449fdd5af1ca4f86e0a11ea20648b901129c57"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "engineering-v1",
+  "created_at": "2026-10-28T14:33:25.416825+00:00",
+  "hashes": {
+    "engineering_cases/v1/cases.json": "9c4d1efc4214c43e41598272ffa959f2f8f1d0701ca50a4a9c1fcb70f1192e57",
+    "engineering_cases/v1/reference_key.json": "c9f7a3b91168e87a66837519886a13c2bf5c2e59fb87dd03cef373a336293198",
+    "engineering_cases/v1/PROTOCOL.md": "091f0b107f09c296f0165afe11aa6dc4b7fa92b71e75b0cb44b9d542e7b690bd",
+    "engineering_cases/v1/VALIDATION_SOURCES.md": "ae0add6d2ff2e0ef400a5c34f51a614b633250ca3bed05962b61fdf427753743",
+    "code/engineering_review.py": "7e6c94db7a0b996a52164904bd82704a0362af11990913939937d26036fd4ca9",
+    "code/reference_checks.py": "4f0042fe1b9bc28a73c8003fe4cb55e8744326549e9c3b862d0ddd77656e6847",
+    "code/physics.py": "95f94a4b0dc1a212c8dd15106522f2710e14bf460fa031fbd7a40fdece6122a6",
+    "code/meta_client.py": "5bc000bb120ecdee16577733118158613e2b67a2a4bbafca406a62a4d3e96aee",
+    "code/api_budget.py": "4dfb82e0f3e62e2070d341c0307c3691c2fd6d9fd2e8545b8baa6f9f031bcd13",
+    "code/evaluation.py": "a71d1e7e324e3e211523376ef8a51a7735fc15809a80652958f75f388c6c945c",
+    "code/agent_contracts.py": "9b5b24178582b775976805212e6f2f2254e3eca5f2c7f4e313c19b907806533a",
+    "code/evidence.py": "2c542cc375a1ebe4d8260625d81b15699f2eaa9b9d6782f3305103aaeb0be4af",
+    "code/investigation.py": "dea3e6f27add3816033580869841417dbbc9a15366530890a646dc784a6ff019"
+  },
+  "sha256": "9e6cf2ae4a8427940d18d4a303a36e64681836274db832c0c6a2bcb8e12ac859"
+}
