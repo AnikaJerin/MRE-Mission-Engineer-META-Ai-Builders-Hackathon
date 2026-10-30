@@ -88,8 +88,11 @@ def validate_draft(value):
     for key,entry in value['form'].items():
         if key in ('trace','resistance_trace') and (not isinstance(entry,list) or len(entry)>1000):raise EvidenceError('Draft trace must contain at most 1000 rows')
         if key=='test_estimates' and not isinstance(entry,dict):raise EvidenceError('Draft estimates must be an object')
+        if key=='reactor_scenario' and entry is not None:
+            from .reactor_field import validate_scenario
+            validate_scenario(entry)
         if key=='composition' and entry is not None and not isinstance(entry,dict):raise EvidenceError('Draft composition must be an object')
-        if key not in ('trace','resistance_trace','test_estimates','composition') and entry is not None and type(entry) not in (str,int,float):raise EvidenceError('Draft scalar fields must contain text or numbers')
+        if key not in ('trace','resistance_trace','test_estimates','composition','reactor_scenario') and entry is not None and type(entry) not in (str,int,float):raise EvidenceError('Draft scalar fields must contain text or numbers')
     origin=value.get('origin')
     if origin is not None and (not isinstance(origin,dict) or set(origin)-{'import_id','example_id','label'}):raise EvidenceError('Unsupported draft provenance')
     try:

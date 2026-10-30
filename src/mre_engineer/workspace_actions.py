@@ -19,9 +19,9 @@ class Actions:
         with self.lock:return dict(self.job)
 
     def start(self,data):
-        if not isinstance(data,dict) or set(data)-{'action','run_name','freeze_name','split','case_id','consent','input','import_id','example_id','filename','file_base64','assessment_id','review_state','reviewer','comment','preview_sha256'}:raise EvidenceError('Unknown action fields')
+        if not isinstance(data,dict) or set(data)-{'action','run_name','freeze_name','split','case_id','consent','input','import_id','example_id','filename','file_base64','assessment_id','review_state','reviewer','comment','preview_sha256','previous_scene_id','capture','scene_id','assumptions','request_id','comparison'}:raise EvidenceError('Unknown action fields')
         action=data.get('action')
-        if action not in ('check','freeze','run','export','stop','preview_assessment','assess','import_excel','review_assessment'):raise EvidenceError('Unsupported UI action')
+        if action not in ('check','freeze','run','export','stop','preview_assessment','assess','import_excel','review_assessment','reactor_hypotheses','sam_segment','sam_compare','hypothesis_tests','acknowledge_unknown_cost'):raise EvidenceError('Unsupported UI action')
         if action=='stop':
             self.stop_event.set();return {'status':'stop-requested','note':'An in-flight request may finish; stop applies before the next request.'}
         for field in ('run_name','freeze_name'):
@@ -42,6 +42,30 @@ class Actions:
                 if data['preview_sha256']!=digest(validated):raise EvidenceError('Inputs changed after local preview. Preview the current values again before spending credits.')
         if action=='import_excel':
             if not isinstance(data.get('file_base64'),str) or len(data['file_base64'])>2_700_000:raise EvidenceError('Excel upload is too large')
+        if action=='reactor_hypotheses':
+            if data.get('consent') is not True:raise EvidenceError('Confirm Meta credit use for the hypothesis layer')
+            from .reactor_hypotheses import assessment
+            assessment(self.root,safe_name(data.get('assessment_id')))
+            if data.get('previous_scene_id'):safe_name(data['previous_scene_id'])
+        if action=='sam_compare':
+            if data.get('consent') is not True:raise EvidenceError('Confirm image review credit use')
+            from .sam_comparison import validate_input
+            from .reactor_hypotheses import assessment
+            validate_input(data.get('comparison'));assessment(self.root,safe_name(data.get('assessment_id')))
+        if action=='sam_segment':
+            if data.get('consent') is not True:raise EvidenceError('Confirm reference-image sharing with Meta SAM')
+            from .sam_assets import validate_capture
+            validate_capture(data.get('capture'))
+        if action=='hypothesis_tests':
+            if data.get('consent') is not True:raise EvidenceError('Confirm two-request hypothesis test credit use')
+            from .hypothesis_tests import validate_assumptions
+            from .reactor_hypotheses import load
+            validate_assumptions(data.get('assumptions'))
+            scene=load(self.root,safe_name(data.get('scene_id')))
+            if scene['status']!='completed':raise EvidenceError('A completed hypothesis set is required')
+        if action=='acknowledge_unknown_cost':
+            if data.get('consent') is not True:raise EvidenceError('Explicit acceptance of unknown cost is required')
+            safe_name(data.get('request_id'))
         if action=='review_assessment':safe_name(data.get('assessment_id'))
         with self.lock:
             if self.job['state']=='running':raise EvidenceError('A workspace job is already running')
@@ -60,6 +84,22 @@ class Actions:
             elif action=='assess':
                 from .experiment_agent import run
                 result=run(self.root,data['input'],True,data.get('import_id'),data.get('example_id'),stop=self.stop_event.is_set,progress=progress)
+            elif action=='reactor_hypotheses':
+                from .reactor_hypotheses import run
+                result=run(self.root,data['assessment_id'],True,data.get('previous_scene_id'),stop=self.stop_event.is_set,progress=progress)
+            elif action=='hypothesis_tests':
+                from .hypothesis_tests import run
+                result=run(self.root,data['scene_id'],data['assumptions'],True,stop=self.stop_event.is_set,progress=progress)
+            elif action=='acknowledge_unknown_cost':
+                from .api_budget import acknowledge_unknown_cost
+                row=acknowledge_unknown_cost(self.root,data['request_id'],True)
+                result={'status':'unknown-cost-acknowledged-not-settled','request_id':row['id'],'api_calls':0}
+            elif action=='sam_compare':
+                from .sam_comparison import run
+                result=run(self.root,data['assessment_id'],data['comparison'],True,stop=self.stop_event.is_set,progress=progress)
+            elif action=='sam_segment':
+                from .sam_assets import run
+                result=run(self.root,data['capture'],True,stop=self.stop_event.is_set,progress=progress)
             elif action=='import_excel':
                 from .experiment_excel import parse_xlsx,save_import
                 try:raw=base64.b64decode(data['file_base64'],validate=True)

@@ -16,7 +16,7 @@ DEFAULTS={'process':'molten_regolith_electrolysis','configuration':'unknown','ca
  'question':'What does the oxygen accounting support, what remains uncertain, and which evidence should be checked next?'}
 ENUMS.update({k:[v[0] for v in choices] for k,choices in CHOICES.items()})
 DEFAULTS.update({k:choices[0][0] for k,choices in CHOICES.items()})
-ALLOWED=set(NUMERIC_FIELDS)|set(TEXT_FIELDS)|set(ENUMS)|{'trace','composition','test_estimates','resistance_trace'}
+ALLOWED=set(NUMERIC_FIELDS)|set(TEXT_FIELDS)|set(ENUMS)|{'trace','composition','test_estimates','resistance_trace','reactor_scenario'}
 UNITS={'temperature_C':'degC','current_A':'A','duration_s':'s','collected_o2_g':'g','voltage_V':'V','sample_mass_g':'g','oxygen_uncertainty_g':'g','current_uncertainty_A':'A','duration_uncertainty_s':'s','available_hours':'h','budget_usd':'USD'}
 UNITS.update(EXTRA_UNITS)
 
@@ -31,6 +31,9 @@ def finite(value,label,positive=False):
 def validate_input(value):
     if not isinstance(value,dict) or set(value)-ALLOWED:raise EvidenceError('Unexpected experiment fields; use the input form or current Excel template')
     data={**deepcopy(DEFAULTS),**deepcopy(value)}
+    if data.get('reactor_scenario') is not None:
+        from .reactor_field import validate_scenario
+        data['reactor_scenario']=validate_scenario(data['reactor_scenario'])
     for key in TEXT_FIELDS:
         v=data.get(key)
         if v is None or v=='':data[key]=None;continue

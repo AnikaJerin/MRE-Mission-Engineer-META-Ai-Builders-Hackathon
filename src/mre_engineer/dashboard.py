@@ -132,6 +132,51 @@ class Handler(BaseHTTPRequestHandler):
                 self._respond(200,json.dumps(workspace_store.registry(self.root),allow_nan=False).encode(),'application/json')
             elif self.path == '/api/experiment-example':
                 self._respond(200,json.dumps({'input':experiment_example(),'example_id':'yu2025-one-hour'},allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/material-forecast?'):
+                from .material_forecast import latest
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps(latest(self.root,query.get('assessment_id',[''])[0]),allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/hypothesis-tests?'):
+                from .hypothesis_tests import latest
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps(latest(self.root,query.get('scene_id',[''])[0]),allow_nan=False).encode(),'application/json')
+            elif self.path == '/api/reactor-diagnostics':
+                from .reactor_diagnostics import latest
+                self._respond(200,json.dumps(latest(self.root),allow_nan=False).encode(),'application/json')
+            elif self.path == '/api/sam-library':
+                from . import sam_assets
+                items=[]
+                for p in (Path(self.root)/'outputs/sam-segmentations').glob('*/report.json'):
+                    d=read_json(p)
+                    if d.get('status')=='completed':items.append({k:d[k] for k in ('id','created_at','component_id','concept')})
+                items.sort(key=lambda d:d['created_at'],reverse=True)
+                self._respond(200,json.dumps({'items':items}).encode(),'application/json')
+            elif self.path.startswith('/api/sam-capture?'):
+                from .sam_comparison import mask_metrics
+                query=parse_qs(urlparse(self.path).query)
+                image,masks=mask_metrics(self.root,safe_name(query.get('id',[''])[0]))
+                self._respond(200,json.dumps({**image,'masks':masks},allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/sam-comparison?'):
+                from .sam_comparison import latest
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps(latest(self.root,query.get('assessment_id',[''])[0]),allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/sam-comparison-record?'):
+                from .sam_comparison import load
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps(load(self.root,safe_name(query.get('id',[''])[0])),allow_nan=False).encode(),'application/json')
+            elif self.path == '/api/sam-segmentation':
+                from .sam_assets import latest
+                self._respond(200,json.dumps(latest(self.root),allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/reactor-hypotheses?'):
+                from .reactor_hypotheses import index
+                query=parse_qs(urlparse(self.path).query)
+                value=index(self.root,safe_name(query.get('assessment_id',[''])[0]))
+                self._respond(200,json.dumps(value,allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/reactor-hypothesis?'):
+                from .reactor_hypotheses import load
+                query=parse_qs(urlparse(self.path).query)
+                value=load(self.root,safe_name(query.get('id',[''])[0]))
+                self._respond(200,json.dumps(value,allow_nan=False).encode(),'application/json')
             elif self.path.startswith('/api/assessment?'):
                 query=parse_qs(urlparse(self.path).query);id=safe_name(query.get('id',[''])[0]);value=load_assessment(self.root,id)
                 self._respond(200,json.dumps(value,allow_nan=False).encode(),'application/json')
@@ -179,7 +224,7 @@ class Handler(BaseHTTPRequestHandler):
         origin=self.headers.get('Origin','')
         if host not in allowed or origin!=f'http://{host}' or not hmac.compare_digest(self.headers.get('X-MRE-Token','').encode('utf-8'),self.server.csrf.encode('utf-8')):
             self._respond(403,b'{"error":"Local same-origin token required"}','application/json');return
-        if self.path not in ('/api/actions','/api/workspace-draft') or self.headers.get('Content-Type','').split(';')[0]!='application/json':
+        if self.path not in ('/api/actions','/api/workspace-draft','/api/reactor-scenario','/api/material-forecast') or self.headers.get('Content-Type','').split(';')[0]!='application/json':
             self._respond(400,b'{"error":"Unsupported local action route or content type"}','application/json');return
         try:
             size=int(self.headers.get('Content-Length','0'))
@@ -187,11 +232,19 @@ class Handler(BaseHTTPRequestHandler):
             raw=self.rfile.read(size)
             if len(raw)!=size:raise EvidenceError('Incomplete action body')
             data=read_action_body(raw)
+            if self.path=='/api/material-forecast':
+                from .material_forecast import save
+                if size>4000 or not isinstance(data,dict) or set(data)!={'assessment_id','forecast'}:raise EvidenceError('Invalid material forecast request')
+                self._respond(200,json.dumps(save(self.root,data['assessment_id'],data['forecast']),allow_nan=False).encode(),'application/json');return
+            if self.path=='/api/reactor-scenario':
+                from .reactor_field import simulate
+                if size>4000:raise EvidenceError('Scenario input is too large')
+                self._respond(200,json.dumps(simulate(data),allow_nan=False).encode(),'application/json');return
             if self.path=='/api/workspace-draft':
                 if not isinstance(data,dict) or set(data)!={'draft','revision'}:raise EvidenceError('Draft and revision are required')
                 result=workspace_store.save_draft(self.root,data['draft'],data['revision'])
                 self._respond(200,json.dumps(result,allow_nan=False).encode(),'application/json');return
-            limit=3_000_000 if isinstance(data,dict) and data.get('action')=='import_excel' else 1_000_000 if isinstance(data,dict) and data.get('action') in ('assess','preview_assessment') else 16000
+            limit=3_000_000 if isinstance(data,dict) and data.get('action')=='import_excel' else 1_000_000 if isinstance(data,dict) and data.get('action') in ('assess','preview_assessment','sam_segment') else 16000
             if size>limit:raise EvidenceError('Action body exceeds allowed size')
             result=self.server.actions.start(data)
             self._respond(202,json.dumps(result,allow_nan=False).encode(),'application/json')

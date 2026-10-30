@@ -11,6 +11,16 @@ def export_data(root,id):
     return {'assessment':value['report'],'researcher_review':value['review'],'trace':value['events'],'trace_integrity':value['trace_integrity'],'current_code_matches':value['current_code_matches']}
 
 
+def readable(value):
+    e=html.escape
+    hidden={'id','evidence_id','input_sha256','sha256','kind','exact_values_location'}
+    if value is None:return 'Not supplied'
+    if isinstance(value,bool):return 'Yes' if value else 'No'
+    if isinstance(value,dict):return '<dl>'+''.join('<dt>'+e(str(k).replace('_',' '))+'</dt><dd>'+readable(v)+'</dd>' for k,v in value.items() if k not in hidden)+'</dl>'
+    if isinstance(value,list):return '<ul>'+''.join('<li>'+readable(v)+'</li>' for v in value)+'</ul>'
+    return e(str(value))
+
+
 def to_html(value):
     e=html.escape;r=value['assessment'];calc=r['accounting'];body=[]
     body.append('<h1>'+e(r['input']['experiment_name'])+'</h1><p>'+e(r['input']['question'])+'</p><p>'+e(r['status']+' · '+r['effective_review_status'].replace('_',' '))+'</p>')
@@ -23,12 +33,12 @@ def to_html(value):
     if performance:
         body.append('<h2>Structured performance metrics</h2><table><tr><th>Metric</th><th>Value</th><th>Formula / basis</th></tr>')
         for m in performance['metrics'].values():body.append('<tr><td>'+e(m['label'])+'</td><td>'+e('Not available' if m['value'] is None else format(m['value'],'.8g')+' '+m['unit'])+'</td><td>'+e(m['formula'])+'</td></tr>')
-        body.append('</table><h2>Declared targets and selected official requirements</h2><pre>'+e(json.dumps({'user_targets':performance['target_checks'],'official_profile':performance.get('official_profile_checks',[])},indent=2))+'</pre>')
+        body.append('</table><h2>Declared targets and selected official requirements</h2>'+readable({'user_targets':performance['target_checks'],'official_profile':performance.get('official_profile_checks',[])})+'')
         body.append('<h2>Decision evidence</h2>')
         for d in r.get('decision_evidence',[]):
-            body.append('<h3>'+e(d['dimension'])+' — '+e({'supported_observation':'Recorded observation — not a performance pass','concern_supported':'Evidence supports a concern','insufficient_evidence':'More evidence needed'}.get(d['model_status'],d['model_status']))+'</h3><p>'+e(d['model_finding'])+'</p><p>'+e(d.get('model_basis') or '')+'</p><p>'+e(d['improvement_or_next_evidence'])+'</p><details><summary>Inputs, calculations, references and tool receipts</summary><pre>'+e(json.dumps(d,indent=2))+'</pre></details>')
+            body.append('<h3>'+e(d['dimension'])+' — '+e({'supported_observation':'Recorded observation — not a performance pass','concern_supported':'Evidence supports a concern','insufficient_evidence':'More evidence needed'}.get(d['model_status'],d['model_status']))+'</h3><p>'+e(d['model_finding'])+'</p><p>'+e(d.get('model_basis') or '')+'</p><p>'+e(d['improvement_or_next_evidence'])+'</p><details><summary>Inputs, calculations, references and tool receipts</summary>'+readable(d)+'</details>')
     if performance and performance.get('publication_comparisons'):
-        body.append('<h2>Published observation comparisons</h2><pre>'+e(json.dumps(performance['publication_comparisons'],indent=2))+'</pre>')
+        body.append('<h2>Published observation comparisons</h2>'+readable(performance['publication_comparisons'])+'')
     if r.get('reference_registry'):body.append('<p>Reference registry version: '+e(r['reference_registry']['version'])+'</p>')
     if r.get('error'):body.append('<h2>Incomplete workflow</h2><p>'+e(r['error'])+'</p><p>No completed critic/final review is implied. API attempts: '+str(r['api_attempts'])+'</p>')
     body.append('<h2>Evidence still needed</h2><ul>'+''.join('<li>'+e(g['message'])+'</li>' for g in r['readiness']['gaps'])+'</ul>')
@@ -42,7 +52,7 @@ def to_html(value):
                 for ref in c['references']:
                     source=ref.get('source')
                     body.append('<p>'+('<a href="'+e(source['url'],quote=True)+'">'+e(source.get('title') or source['id'])+'</a>: '+e(source['locator']) if source else e(ref['id']))+'</p>')
-                body.append('<details><summary>Comment evidence</summary><pre>'+e(json.dumps(c,indent=2))+'</pre></details>')
+                body.append('<details><summary>Comment evidence</summary>'+readable(c)+'</details>')
             continue
         for f in data.get('findings',[]):body.append('<p>'+e(f['text'])+'</p><p>Why: '+e(f.get('basis') or 'Not recorded in this archived version')+'</p><p>Evidence: '+e(', '.join(f['evidence_refs']))+'</p>')
         for a in data.get('assessments',[]):body.append('<p>'+e(a['dimension']+': '+a['finding'])+'</p><p>Why: '+e(a.get('basis') or 'Not recorded in this archived version')+'</p>')
@@ -53,8 +63,8 @@ def to_html(value):
         t=data['next_test'];body.extend('<p>'+e(t[k])+'</p>' for k in ('question','measurement_or_record','rival_outcomes','prerequisites','reason'))
     body.append('<h2>Sources</h2><ul>')
     for s in r['sources']:body.append('<li><a href="'+e(s['url'],quote=True)+'">'+e(s['id'])+'</a>: '+e(s['locator'])+'</li>')
-    body.append('</ul><h2>Researcher review</h2><pre>'+e(json.dumps(value['researcher_review'],indent=2))+'</pre>')
+    body.append('</ul><h2>Researcher review</h2>'+readable(value['researcher_review'])+'')
     body.append('<p>API attempts: '+str(r['api_attempts'])+'; estimated settled cost $'+str(r['settled_estimated_cost_usd'])+'. Saved '+e(r['completed_at'])+'.</p>')
-    body.append('<h2>Integration scope</h2><p>Manual entry and value-only template Excel import are implemented. Read-only potentiostat/DAQ, LIMS and approved reactor-historian adapters are future work. No live equipment connection, official-software compatibility or reactor control is demonstrated.</p>')
-    body.append('<details><summary>Input, provenance, checks, tools and exact trace</summary><pre>'+e(json.dumps(value,indent=2,allow_nan=False))+'</pre></details>')
+    body.append('<h2>Integration scope</h2><p>Manual entry is the supported researcher workflow. Read-only potentiostat/DAQ, LIMS and approved reactor-historian adapters are future work. No live equipment connection, official-software compatibility or reactor control is demonstrated.</p>')
+    body.append('<p>Full machine-readable inputs, calculation receipts and event trace are available in the separate JSON export.</p>')
     return "<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>MRE experiment review</title><style>body{font:16px system-ui;max-width:980px;margin:40px auto;padding:24px;color:#152631}h1,h2{color:#245c60}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #d1dfe0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}li{margin:12px 0}details{margin-top:32px}@media print{body{margin:0}}</style></head><body>"+''.join(body)+'</body></html>'

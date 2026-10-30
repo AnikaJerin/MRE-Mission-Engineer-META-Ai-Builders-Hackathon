@@ -10,6 +10,7 @@ from .evidence import EvidenceError
 MODEL = "muse-wonder-1.0"
 ENDPOINT = "https://api.meta.ai/v1/responses"
 MAX_REQUESTS = 5
+REQUEST_TIMEOUT_SECONDS = 180
 MAX_OUTPUT_TOKENS = 3000
 # Local serialized-payload bound, not a provider token/context limit.
 # Final revision includes both reviews plus actual tool evidence.
@@ -69,11 +70,11 @@ class MetaClient:
         reservation = api_budget.reserve(self.root)
         self.calls += 1
         self.record("api_reserved", {"request_number": self.calls, "reservation_id": reservation,
-                                     "reserved_usd": 0.25, "model": MODEL})
+                                     "reserved_usd": 0.25, "model": MODEL, "timeout_seconds": REQUEST_TIMEOUT_SECONDS})
         request = urllib.request.Request(ENDPOINT, data=encoded, method="POST",
                     headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
         try:
-            with urllib.request.build_opener(NoRedirect()).open(request, timeout=90) as response:
+            with urllib.request.build_opener(NoRedirect()).open(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
                 raw = response.read(1_000_001)
                 if len(raw) > 1_000_000:
                     raise ValueError("Response too large")

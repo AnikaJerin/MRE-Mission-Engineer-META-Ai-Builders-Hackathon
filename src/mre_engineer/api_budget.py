@@ -4,6 +4,7 @@ import fcntl
 import json
 import os
 import math
+import time
 from pathlib import Path
 from uuid import uuid4
 
@@ -18,10 +19,18 @@ def lock(root, name):
     folder = Path(root) / "outputs/locks"
     folder.mkdir(parents=True, exist_ok=True)
     with (folder / f"{name}.lock").open("a+") as stream:
-        try:
-            fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise EvidenceError("Another local operation is active; no concurrent paid run allowed") from exc
+        # Dashboard reads may briefly overlap a reservation/settlement write.
+        # Serialize these short ledger operations; never queue another paid run.
+        deadline=time.monotonic()+(2.0 if name == "billing" else 0.0)
+        while True:
+            try:
+                fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError as exc:
+                if time.monotonic() >= deadline:
+                    message=("Billing ledger is busy; retry the local operation after it finishes. No automatic API retry." if name == "billing" else "Another local operation is active; no concurrent paid run allowed")
+                    raise EvidenceError(message) from exc
+                time.sleep(0.01)
         try: yield
         finally: fcntl.flock(stream, fcntl.LOCK_UN)
 
@@ -66,6 +75,8 @@ def snapshot(root):
     return {"accounted_or_reserved_usd": used / 1e6,
             "local_limit_usd": PROJECT_LIMIT_MICROUSD / 1e6,
             "per_request_reservation_usd": REQUEST_RESERVATION_MICROUSD / 1e6,
+            "active_reserved_requests": [r["id"] for r in data["requests"] if r["state"] == "reserved"],
+            "recoverable_unknown_cost_requests": [r["id"] for r in data["requests"] if r["state"] == "unresolved" and not r.get("owner_accepts_unknown_cost") and r["accounted_microusd"] == r["reservation_microusd"]],
             "unresolved_requests": [r["id"] for r in data["requests"] if r["state"] != "settled"],
             "blocking_unresolved_requests": [r["id"] for r in data["requests"] if r["state"] != "settled" and not r.get("owner_accepts_unknown_cost")],
             "acknowledged_unknown_cost_requests": [r["id"] for r in data["requests"] if r["state"] == "unresolved" and r.get("owner_accepts_unknown_cost")],
@@ -140,3 +151,17 @@ def acknowledge_unknown_cost(root, id, accepted):
         row["uncertainty_note"] = "Actual charge unknown. Full local reservation retained; owner permits continuation. Reservation is not a guaranteed upper bound or provider billing cap."
         _write(root, data)
         return row.copy()
+
+
+def settle_sam_image(root,id):
+    """One completed image at published $2.50/1000 SAM 3.1 images.
+
+    Local estimate, not a provider invoice; do not apply Wonder token rates.
+    """
+    with lock(root,'billing'):
+        data=_read(root)
+        rows=[row for row in data['requests'] if row['id']==id]
+        if len(rows)!=1 or rows[0]['state']!='reserved':raise EvidenceError('Invalid SAM reservation')
+        row=rows[0];row.update(state='settled',accounted_microusd=2500,model='sam-3.1',
+          metering_basis='One completed submitted image; estimated at published SAM 3.1 rate, not a provider invoice')
+        _write(root,data);return row.copy()

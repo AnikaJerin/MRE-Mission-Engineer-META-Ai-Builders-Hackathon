@@ -19,3 +19,8 @@ export async function saveDraft(token,draft,revision) {
   if(!response.ok){const error=new Error(value.error || 'Draft save failed. Browser backup retained.');error.status=response.status;throw error;}
   return value;
 }
+
+export async function simulateScenario(token,input) {
+  const response=await fetch('/api/reactor-scenario',{method:'POST',headers:{'Content-Type':'application/json','X-MRE-Token':token},body:JSON.stringify(input)});
+  const value=await response.json();if(!response.ok)throw new Error(value.error || 'Scenario failed');return value;
+}
