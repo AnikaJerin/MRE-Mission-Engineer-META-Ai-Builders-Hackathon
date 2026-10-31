@@ -1,0 +1,83 @@
+{
+  "source": "Yu et al. 2025, NASA NTRS 20250004626, Figure 1(b), Sections 2.2.1-2.2.2",
+  "scope": "Source-based dimensional estimates derived from published figures, text context, and nominal resistance (1.4-1.5 ohm at 0.5 A). NOT as-built CAD dimensions. Exact values require direct measurement or author communication.",
+  "configuration": "hollow_ysz_pt",
+  "description": "Inverted YSZ/Pt hollow-anode molten regolith electrolysis cell. YSZ tube acts as both solid electrolyte and structural anode body. Mo rod serves as central cathode. Pt mesh provides current collection on outside of YSZ.",
+  "components": {
+    "cathode": {
+      "material": "Mo",
+      "role": "Central cathode rod",
+      "inner_radius_mm": null,
+      "outer_radius_mm_estimate": 3.0,
+      "height_mm_estimate": 25.0,
+      "notes": "Solid molybdenum rod; inner radius null (solid). High melting point (2623 C), stable in reducing atmosphere."
+    },
+    "wall": {
+      "material": "YSZ (8 mol% Y2O3-ZrO2)",
+      "role": "Solid electrolyte / hollow anode body",
+      "inner_radius_mm_estimate": 3.0,
+      "outer_radius_mm_estimate": 5.0,
+      "wall_thickness_mm_estimate": 2.0,
+      "height_mm_estimate": 25.0,
+      "notes": "Ionic conductor at MRE temperatures (~1600 C). Oxygen ions transported outward; oxygen gas evolved at external Pt interface."
+    },
+    "anode": {
+      "material": "Pt",
+      "role": "Current collector exterior to YSZ tube",
+      "outer_radius_mm_estimate": 6.0,
+      "notes": "Platinum mesh or foil. Stable in oxidizing atmosphere at high temperature. Collects current from electrochemical oxygen evolution at YSZ-Pt interface."
+    },
+    "vessel": {
+      "material": "Al2O3 (alumina)",
+      "role": "Outer containment / structural housing",
+      "outer_radius_mm_estimate": 15.0,
+      "notes": "Chemically stable at MRE temperatures. Electrically insulating. Contains regolith melt."
+    },
+    "melt": {
+      "material": "LHS-1 lunar highland simulant",
+      "role": "Molten regolith electrolyte / process medium",
+      "temperature_C_operating": 1600,
+      "notes": "Principal oxide components: SiO2, Al2O3, CaO, MgO, FeO, TiO2. Ionic conductor in molten state. Oxygen source for electrolysis."
+    },
+    "gas": {
+      "material": "O2 (evolved gas)",
+      "role": "Oxygen outlet plenum / gas collection region",
+      "notes": "Evolved at YSZ-Pt interface (anode). Collected and vented. Byproduct of lunar oxygen ISRU production."
+    }
+  },
+  "published_performance": {
+    "current_A": 0.5,
+    "resistance_ohm": {
+      "one_hour_run": {
+        "initial": 1.54,
+        "final_after_1h": 1.44,
+        "notes": "Resistance drops slightly as cell reaches thermal equilibrium"
+      },
+      "twelve_hour_run": {
+        "initial": 1.46,
+        "final_after_12h": 0.78,
+        "notes": "Resistance drop over 12 h may indicate electrolyte conditioning or melt composition change"
+      }
+    },
+    "voltage_V_estimate": {
+      "one_hour": {"initial_estimate": 0.77, "final_estimate": 0.72},
+      "twelve_hour": {"initial_estimate": 0.73, "final_estimate": 0.39}
+    }
+  },
+  "geometry_rationale": {
+    "cathode_radius": "Mo rod ~3 mm estimated from figure proportions; consistent with commercial Mo rod stock",
+    "ysz_wall_thickness": "~2 mm thick YSZ tube; thinner walls risk fracture, thicker walls increase ohmic resistance",
+    "active_height": "~25 mm estimated from charge/area context and tube proportions visible in Figure 1(b)",
+    "resistance_consistency": "R = ln(ro/ri) / (2*pi*h*sigma) with YSZ conductivity ~2 S/m at 1600 C gives R ~ 1.3-1.7 ohm, consistent with published 1.44-1.54 ohm"
+  },
+  "limitations": [
+    "All dimensions are estimates scaled from published figure; not validated against as-built hardware drawings",
+    "YSZ conductivity is temperature-dependent; constant-property model is a simplification",
+    "Resistance values include electrochemical interfacial contributions not captured by bulk geometry alone",
+    "Geometry varies between experimental runs and may differ from nominal configuration",
+    "This JSON is a reference for scenario setup, not a calibrated digital twin"
+  ],
+  "data_version": "1.0",
+  "derived_by": "MRE Mission Engineer v0.1 — geometry resource, not a simulation output"
+}
+

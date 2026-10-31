@@ -23,6 +23,8 @@ IDS={'type':'array','minItems':1,'maxItems':4,'uniqueItems':True,'items':{'type'
 HYPOTHESIS=obj({'explanation':SHORT,'components':{'type':'array','minItems':1,'maxItems':3,'uniqueItems':True,'items':{'type':'string','enum':list(COMPONENTS)}},
  'basis':SHORT,'metric_ids':{'type':'array','maxItems':4,'uniqueItems':True,'items':{'type':'string'}},
  'input_fields':IDS,'evidence_refs':IDS,'research_refs':IDS,'applicability':SHORT,'test_to_distinguish':SHORT})
+# Optional for older saved submissions; required by the new request-specific schema.
+HYPOTHESIS['properties']['calculation_receipt']={'type':'string'}
 CHANGE=obj({'previous_number':{'type':'integer','minimum':1,'maximum':3},
  'outcome':{'type':'string','enum':['retained','revised','rejected']},'reason':SHORT,'evidence_refs':IDS})
 SCHEMA=obj({'hypotheses':{'type':'array','minItems':2,'maxItems':3,'items':HYPOTHESIS},
@@ -41,6 +43,20 @@ def assessment(root,id):
         raise EvidenceError('A completed saved assessment with a final review is required; no new assessment is started here')
     return r
 
+def submission_schema(r):
+    # JSON roundtrip isolates reused IDS objects; deepcopy preserves their aliases.
+    schema=json.loads(json.dumps(SCHEMA))
+    props=schema['properties']['hypotheses']['items']['properties']
+    receipts=list(dict.fromkeys(t['evidence_id'] for t in r['tools'] if t['tool']=='performance_assessment'))
+    if not receipts:raise EvidenceError('Saved assessment has no executed performance receipt')
+    props['calculation_receipt']={'type':'string','enum':receipts}
+    schema['properties']['hypotheses']['items']['required'].append('calculation_receipt')
+    props['metric_ids']['items']['enum']=[k for k,v in r['performance']['metrics'].items() if v['value'] is not None]
+    props['input_fields']['items']['enum']=list(r['input'])
+    props['research_refs']['items']['enum']=[s['id'] for s in r['sources']]
+    props['evidence_refs']['items']['enum']=['input-record']+[t['evidence_id'] for t in r['tools']]+[s['id'] for s in r['sources']]
+    return schema
+
 def verify(value,r,previous=None):
     validate(value,SCHEMA)
     refs={'input-record'}|{s['id'] for s in r['sources']}|{t['evidence_id'] for t in r['tools']}
@@ -53,7 +69,9 @@ def verify(value,r,previous=None):
         if any(r['performance']['metrics'][k]['value'] is None for k in h['metric_ids']):raise EvidenceError('Hypothesis cites an uncalculated metric')
         if not any(r['input'].get(k) not in (None,'',[],{},'unknown','not_supplied','not_assessed') for k in h['input_fields']) and not h['metric_ids']:
             raise EvidenceError('Hypothesis needs an actual supplied observation or available calculation')
-        if h['metric_ids'] and not any(t['tool']=='performance_assessment' and t['evidence_id'] in h['evidence_refs'] for t in r['tools']):
+        receipts={t['evidence_id'] for t in r['tools'] if t['tool']=='performance_assessment'}
+        if 'calculation_receipt' in h and h['calculation_receipt'] not in receipts:raise EvidenceError('Hypothesis calculation receipt was not executed for this assessment')
+        if h['metric_ids'] and not (receipts.intersection(h['evidence_refs']) or h.get('calculation_receipt') in receipts):
             raise EvidenceError('Hypothesis calculations require the executed performance receipt')
     expected=set(range(1,len(previous['result']['hypotheses'])+1)) if previous else set()
     numbers=[c['previous_number'] for c in value['changes']]
@@ -107,16 +125,18 @@ def run(root,assessment_id,allow_api_call=False,previous_id=None,client_factory=
       'final_review':r['final_review'],'critic':r['critique'],'sources':r['sources'],
       'tool_receipts':[{'evidence_id':t['evidence_id'],'tool':t['tool']} for t in r['tools']],
       'previous_hypotheses':{'hypotheses':prior['result']['hypotheses'],'assessment_name':prior['experiment_name'],'metrics':{k:{'value':v['value'],'unit':v['unit']} for k,v in prior_assessment['performance']['metrics'].items()}} if prior else None,'allowed_components':list(COMPONENTS)}
+    schema=submission_schema(r)
+    packet['calculation_citation_contract']={'required_field':'calculation_receipt','allowed_executed_receipts':schema['properties']['hypotheses']['items']['properties']['calculation_receipt']['enum'],'rule':'Each hypothesis must explicitly supply calculation_receipt from this list. Measurement-readiness receipts do not support calculated metrics. Do not invent or alter receipt IDs.'}
     refs=['input-record']+[s['id'] for s in r['sources']]+[t['evidence_id'] for t in r['tools']]
     with api_budget.lock(root,'investigation'):
         dest.mkdir(parents=True,exist_ok=False);client=client_factory(root,record)
         try:
             if stop and stop():raise EvidenceError('Owner requested stop before the Meta request')
             record('assessment_linked',{'assessment_id':assessment_id,'assessment_sha256':r['sha256'],'previous_id':previous_id})
-            response=client.request({'instructions':INSTRUCTIONS,'input':json.dumps({'evidence':packet,'allowed_evidence_refs':refs},allow_nan=False,separators=(',',':')),
-              'tools':[{'type':'function','name':'submit_component_hypotheses','description':'Submit unconfirmed result-linked component hypotheses and a version comparison.','parameters':provider_output_schema(SCHEMA)}]})
+            response=client.request({'instructions':INSTRUCTIONS+' Every hypothesis must include calculation_receipt using the exact executed performance receipt specified in calculation_citation_contract. This is a separate required field, including when evidence_refs also cite it.','input':json.dumps({'evidence':packet,'allowed_evidence_refs':refs},allow_nan=False,separators=(',',':')),
+              'tools':[{'type':'function','name':'submit_component_hypotheses','description':'Submit unconfirmed result-linked component hypotheses and a version comparison.','parameters':provider_output_schema(schema)}]})
             record('model_submission',response_record(response,'submit_component_hypotheses'))
-            result=verify(parse_submission(response,'submit_component_hypotheses',SCHEMA,refs),r,prior)
+            result=verify(parse_submission(response,'submit_component_hypotheses',schema,refs),r,prior)
             record('hypotheses_validated',{'component_and_evidence_ids':'checked','semantic_truth':'not independently certified'})
         except Exception as exc:
             error=str(exc) if isinstance(exc,EvidenceError) else 'Hypothesis generation failed; saved review remains unchanged. Inspect the recorded trace. No automatic retry.'

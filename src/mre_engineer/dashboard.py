@@ -204,6 +204,19 @@ class Handler(BaseHTTPRequestHandler):
                 asset=files("mre_engineer").joinpath("web", name).read_bytes()
                 if self.path=='/validation':asset=asset.replace(b'href="/style.css"',b'href="/validation/style.css"').replace(b'src="/app.js"',b'src="/validation/app.js"')
                 self._respond(200,asset,mime)
+            elif self.path == '/api/reactor-geometry':
+                from importlib.resources import files as _resfiles
+                import json as _json2
+                _gdata = _json2.loads(_resfiles('mre_engineer').joinpath('resources', 'reactor_geometry.json').read_text(encoding='utf-8'))
+                self._respond(200, _json2.dumps(_gdata, allow_nan=False).encode(), 'application/json')
+            elif self.path == '/api/reactor-calibration-profile':
+                from .reactor_calibration import calibration_profile as _cal_profile
+                import json as _json3
+                self._respond(200, _json3.dumps(_cal_profile(), allow_nan=False).encode(), 'application/json')
+            elif self.path == '/api/reactor-degradation-models':
+                from .reactor_degradation import model_catalog as _deg_catalog
+                import json as _json4
+                self._respond(200, _json4.dumps(_deg_catalog(), allow_nan=False).encode(), 'application/json')
             else:
                 self._respond(404, b"Not found", "text/plain")
         except (OSError, ValueError, KeyError, TypeError) as exc:

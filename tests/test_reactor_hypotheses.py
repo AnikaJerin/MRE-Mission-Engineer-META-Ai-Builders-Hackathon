@@ -31,7 +31,10 @@ class FakeClient:
     def __init__(self,root,record):self.calls=0
     def request(self,body):
         self.calls+=1
-        return {'output':[{'type':'function_call','name':'submit_component_hypotheses','arguments':json.dumps(result())}]}
+        value=result()
+        receipts=body['tools'][0]['parameters']['properties']['hypotheses']['items']['properties']['calculation_receipt']['enum']
+        for h in value['hypotheses']:h['calculation_receipt']=receipts[0]
+        return {'output':[{'type':'function_call','name':'submit_component_hypotheses','arguments':json.dumps(value)}]}
 
 class HypothesisLayerTests(unittest.TestCase):
     def test_unknown_components_or_sources_fail(self):
