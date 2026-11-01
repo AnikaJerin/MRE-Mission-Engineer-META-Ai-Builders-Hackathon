@@ -98,7 +98,7 @@ export default function ReactorLab({report=null,token,scenario,onScenario,busy=f
   const file=event.target.files?.[0];if(!file)return;
   try{
    if(!file.name.toLowerCase().endsWith('.glb')||file.size>20_000_000)throw new Error('Use an embedded GLB mesh no larger than 20 MB.');
-   const buffer=await file.arrayBuffer();if(new DataView(buffer).getUint32(0,true)!==0x46546c67)throw new Error('This file is not a binary GLB mesh.');
+   const buffer=await file.arrayBuffer();if(buffer.byteLength<12||new DataView(buffer).getUint32(0,true)!==0x46546c67)throw new Error('This file is not a binary GLB mesh.');
    const manager=new THREE.LoadingManager();manager.setURLModifier(url=>{if(url.startsWith('blob:')||url.startsWith('data:'))return url;throw new Error('External mesh resources are not allowed. Export one embedded GLB file.');});
    const gltf=await new Promise((resolve,reject)=>new GLTFLoader(manager).parse(buffer,'',resolve,reject));
    const names=[];gltf.scene.traverse(n=>{if(n.isMesh){if(!n.name)n.name='mesh-'+names.length;if(names.includes(n.name))n.name+='-'+names.length;names.push(n.name);}});

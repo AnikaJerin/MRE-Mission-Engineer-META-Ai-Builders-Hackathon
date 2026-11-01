@@ -51,7 +51,7 @@ _R_GAS = 8.314472  # J / (mol K)
 
 def _check_positive_finite(value: float, name: str) -> float:
     """Raise EvidenceError if value is not a positive finite number."""
-    if not isinstance(value, (int, float)):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise EvidenceError(f"{name} must be a number")
     v = float(value)
     if not math.isfinite(v):
@@ -63,7 +63,7 @@ def _check_positive_finite(value: float, name: str) -> float:
 
 def _check_nonneg_finite(value: float, name: str) -> float:
     """Raise EvidenceError if value is not a non-negative finite number."""
-    if not isinstance(value, (int, float)):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise EvidenceError(f"{name} must be a number")
     v = float(value)
     if not math.isfinite(v):
@@ -257,7 +257,7 @@ def thermal_stress(
 ) -> dict:
     """Estimate thermoelastic stress from temperature differential.
 
-    σ = E · α · ΔT   (unconstrained uniaxial; upper bound)
+    σ = E · α · ΔT   (fully restrained, uniaxial elastic assumption)
 
     Parameters
     ----------
@@ -286,7 +286,7 @@ def thermal_stress(
         "alpha_per_K": alpha,
         "delta_T_C": dT,
         "stress_MPa": round(sigma_MPa, 4),
-        "note": "Uniaxial fully-constrained upper bound. Real geometry (cylinder, gradient) will produce lower effective stress. Creep and plasticity excluded.",
+        "note": "Fully restrained uniaxial elastic stress magnitude. Free thermal expansion gives zero stress. This is not a general upper bound for multiaxial geometry. Creep and plasticity excluded.",
         "scope": _SCOPE,
         "limitations": _LIMITATIONS,
     }
@@ -341,7 +341,9 @@ def lifetime_prediction(
     obs = _check_positive_finite(exposure_h, "exposure_h")
     horizon = _check_positive_finite(horizon_h, "horizon_h")
     thickness = _check_positive_finite(initial_thickness_um, "initial_thickness_um")
-    unc = _check_positive_finite(uncertainty_percent, "uncertainty_percent")
+    unc = _check_nonneg_finite(uncertainty_percent, "uncertainty_percent")
+    if unc >= 100:
+        raise EvidenceError("uncertainty_percent must be below 100")
 
     if model not in ("linear", "parabolic", "arrhenius"):
         raise EvidenceError(
@@ -374,20 +376,20 @@ def lifetime_prediction(
         k = loss / math.sqrt(obs)
         k_hi = k * (1 + unc / 100)
         k_lo = k * (1 - unc / 100)
-        # Solve remaining_thickness = k·√t_remaining
-        pred_h = (remaining_thickness / k) ** 2
-        lo_h   = (remaining_thickness / k_hi) ** 2
-        hi_h   = (remaining_thickness / k_lo) ** 2
+        # Preserve accumulated loss: L_future² = L_observed² + k²*t_additional.
+        residual_square = thickness ** 2 - loss ** 2
+        pred_h = residual_square / k ** 2
+        lo_h   = residual_square / k_hi ** 2
+        hi_h   = residual_square / k_lo ** 2
 
     else:  # arrhenius
         if temperature_C is None:
             raise EvidenceError("temperature_C is required for arrhenius model")
         if not math.isfinite(float(temperature_C)) or float(temperature_C) <= 0:
             raise EvidenceError("temperature_C must be a positive finite number")
-        # Generic YSZ activation energy: Q = 100 kJ/mol
-        Q_generic = 100_000.0
-        A_generic = loss / (obs * arrhenius_rate(1.0, Q_generic, float(temperature_C) + 273.15))
-        rate = A_generic * arrhenius_rate(1.0, Q_generic, float(temperature_C) + 273.15)
+        # One observation at one temperature cannot identify A and Q.
+        # Same-temperature extrapolation reduces exactly to constant observed rate.
+        rate = loss / obs
         rate_hi = rate * (1 + unc / 100)
         rate_lo = rate * (1 - unc / 100)
         pred_h = remaining_thickness / rate
@@ -412,7 +414,10 @@ def lifetime_prediction(
         "interpretation": (
             "Conditional extrapolation only. Bounds reflect ±{:.0f}% rate uncertainty; "
             "real degradation may follow a different functional form. "
-            "No measured wear data from this cell has been used to fit these parameters."
+            "Rate is fitted to the supplied loss observation, not independently validated. "
+            "For parabolic kinetics the bound applies to k with current loss held fixed. "
+            "Arrhenius lifetime here assumes unchanged temperature; one observation cannot identify activation energy. "
+            "Thickness exhaustion is not a validated failure or crack-initiation criterion."
         ).format(unc),
         "scope": _SCOPE,
         "limitations": _LIMITATIONS,

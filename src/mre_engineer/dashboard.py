@@ -204,6 +204,10 @@ class Handler(BaseHTTPRequestHandler):
                 asset=files("mre_engineer").joinpath("web", name).read_bytes()
                 if self.path=='/validation':asset=asset.replace(b'href="/style.css"',b'href="/validation/style.css"').replace(b'src="/app.js"',b'src="/validation/app.js"')
                 self._respond(200,asset,mime)
+            elif self.path.startswith('/api/material-model?'):
+                from .material_models import latest
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps(latest(self.root,query.get('assessment_id',[''])[0]),allow_nan=False).encode(),'application/json')
             elif self.path == '/api/reactor-geometry':
                 from importlib.resources import files as _resfiles
                 import json as _json2
@@ -237,7 +241,7 @@ class Handler(BaseHTTPRequestHandler):
         origin=self.headers.get('Origin','')
         if host not in allowed or origin!=f'http://{host}' or not hmac.compare_digest(self.headers.get('X-MRE-Token','').encode('utf-8'),self.server.csrf.encode('utf-8')):
             self._respond(403,b'{"error":"Local same-origin token required"}','application/json');return
-        if self.path not in ('/api/actions','/api/workspace-draft','/api/reactor-scenario','/api/material-forecast') or self.headers.get('Content-Type','').split(';')[0]!='application/json':
+        if self.path not in ('/api/actions','/api/workspace-draft','/api/reactor-scenario','/api/material-forecast','/api/material-model','/api/material-properties') or self.headers.get('Content-Type','').split(';')[0]!='application/json':
             self._respond(400,b'{"error":"Unsupported local action route or content type"}','application/json');return
         try:
             size=int(self.headers.get('Content-Length','0'))
@@ -245,6 +249,11 @@ class Handler(BaseHTTPRequestHandler):
             raw=self.rfile.read(size)
             if len(raw)!=size:raise EvidenceError('Incomplete action body')
             data=read_action_body(raw)
+            if self.path in ('/api/material-model','/api/material-properties'):
+                from .material_models import save, properties
+                if size>4000:raise EvidenceError('Material model input is too large')
+                result=save(self.root,data) if self.path=='/api/material-model' else properties(data)
+                self._respond(200,json.dumps(result,allow_nan=False).encode(),'application/json');return
             if self.path=='/api/material-forecast':
                 from .material_forecast import save
                 if size>4000 or not isinstance(data,dict) or set(data)!={'assessment_id','forecast'}:raise EvidenceError('Invalid material forecast request')

@@ -107,7 +107,8 @@ def run(root,assessment_id,data,allow_api_call=False,stop=None,progress=None,cli
                 response=client.request({'instructions':prompt,'input':json.dumps({'evidence':packet,'reviewer':review if stage=='critic' else None},allow_nan=False,separators=(',',':')),'tools':[{'type':'function','name':'submit_image_review','description':'Submit evidence-linked image review comments.','parameters':provider_output_schema(schema)}]})
                 record(stage+'_submission',response_record(response,'submit_image_review'))
                 result=parse_submission(response,'submit_image_review',schema,refs)
-                if not all('image-comparison' in c['evidence_refs'] for c in result['comments']):raise EvidenceError('Each image comment must cite its computed comparison')
+                if not any('image-comparison' in c['evidence_refs'] for c in result['comments']):raise EvidenceError('Image review must cite its computed comparison')
+                if not all(set(c['evidence_refs']) & {'image-comparison','input-record','sam-before','sam-after'} for c in result['comments']):raise EvidenceError('Each image comment must cite a measurement or image record')
                 if stage=='review':review=result
                 else:critic=result
         except Exception as exc:

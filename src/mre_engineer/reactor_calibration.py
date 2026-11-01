@@ -44,8 +44,9 @@ _MO_ALPHA  = 4.9e-3   # K⁻¹  temperature coefficient
 # Scope / limitations strings (shared across all outputs)
 # ---------------------------------------------------------------------------
 _SCOPE = (
-    "Temperature-dependent material property estimates from published bulk data. "
-    "Arrhenius fit for YSZ is from bulk polycrystalline 8YSZ (8 mol% Y₂O₃-ZrO₂); "
+    "Temperature-dependent estimates using selected illustrative material coefficients. "
+    "The exact coefficient pair has not been authenticated against the cited bulk literature. "
+    "Yu's tube is reported as 10.5 wt% YSZ; equivalence to an 8 mol% profile is not established. "
     "activation energy and pre-exponential have NOT been fitted to measured resistance "
     "data from this specific experimental cell."
 )
@@ -159,7 +160,7 @@ def calibration_profile() -> dict:
             "mo_alpha_per_K": _MO_ALPHA,
             "mo_reference_T_K": _MO_T0_K,
         },
-        "source": "Bulk YSZ: Badwal 1992, Ivers-Tiffee 2001. Mo: CRC Handbook (Lide 2004).",
+        "source": "Selected scenario coefficients, not a verified data extraction or fit from Yu 2025. Literature attribution of the exact coefficients remains unverified.",
         "scope": _SCOPE,
         "limitations": _LIMITATIONS,
     }

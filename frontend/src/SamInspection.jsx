@@ -30,7 +30,7 @@ export default function SamInspection({token,job,busy,canBuild,onRefresh}){
  const [image,setImage]=useState(null),[component,setComponent]=useState('vessel'),[concept,setConcept]=useState('ceramic tube'),[url,setUrl]=useState(''),[locator,setLocator]=useState(''),[rights,setRights]=useState(''),[consent,setConsent]=useState(false),[saved,setSaved]=useState(null),[notice,setNotice]=useState(''),[pending,setPending]=useState(false);
  useEffect(()=>{let active=true;get('/api/sam-segmentation').then(v=>active&&setSaved(v.latest)).catch(e=>active&&setNotice(e.message));return()=>{active=false;};},[job?.result?.sam_id]);
  async function choose(e){
-  setConsent(false);const file=e.target.files?.[0];if(!file)return;
+  setConsent(false);const file=e.target.files?.[0];e.target.value='';if(!file)return;
   try{if(file.type!=='image/png'||file.size>750000)throw new Error('Choose a PNG up to 750 KB, 16–1200 pixels per side.');
    const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file);});
    const img=new Image();img.src=data;await img.decode();if(img.width<16||img.height<16||img.width>1200||img.height>1200)throw new Error('Crop the reference to 16–1200 pixels per side.');setImage(data);setNotice('Reference selected. Check its source and permission before sharing.');

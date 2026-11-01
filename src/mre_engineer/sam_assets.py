@@ -99,7 +99,7 @@ def run(root,capture,allow_api_call=False,stop=None,progress=None,opener_factory
         except Exception as exc:
             error=str(exc) if isinstance(exc,EvidenceError) else 'SAM transport or response failed. No automatic retry; inspect billing.'
         if error and reservation:billing=api_budget.settle(root,reservation,None)
-        value={'id':id,'asset_key':'yu2025-reference-v1', 'source':{k:capture[k] for k in ('source_url','source_locator','rights_note','concept')},
+        value={'id':id,'asset_key':'yu2025-reference-v1' if capture['source_url'].strip() else 'experimental-capture-v1', 'source':{k:capture[k] for k in ('source_url','source_locator','rights_note','concept')},
           'created_at':datetime.now(timezone.utc).isoformat(),'status':'completed' if error is None else 'failed','error':error,
           'model':MODEL,'component_id':capture['component_id'],'image_sha256':digest(capture['image_base64']),
           'concept':prompt,'width':w,'height':h,'events':events,'billing':billing,'api_attempts':1 if reservation else 0,
@@ -120,7 +120,7 @@ def latest(root):
     for p in (Path(root)/'outputs/sam-segmentations').glob('*/report.json'):
         try:
             r=read_json(p)
-            if r.get('asset_key')=='yu2025-reference-v1':rows.append(r)
+            if r.get('asset_key')=='yu2025-reference-v1' and r.get('source',{}).get('source_url','').strip():rows.append(r)
         except (OSError,ValueError,KeyError,TypeError):continue
     rows.sort(key=lambda r:r['created_at'],reverse=True)
     return {'latest':load(root,rows[0]['id']) if rows else None,'api_calls':0}

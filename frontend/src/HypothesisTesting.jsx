@@ -1,7 +1,9 @@
 import React,{useEffect,useState} from 'react';
 import {get,action} from './api.js';
 import MaterialForecast from './MaterialForecast.jsx';
+import MaterialModels from './MaterialModels.jsx';
 import ReactorLab from './ReactorLab.jsx';
+import {scenarioComponent} from './scenario-component.js';
 const fields={inner_radius_mm:'Inner radius · mm',outer_radius_mm:'Outer radius · mm',height_mm:'Active height · mm',conductivity_S_m:'Bulk conductivity · S/m',thermal_conductivity_W_mK:'Thermal conductivity · W/(m K)',current_A:'Current · A',inner_temperature_C:'Inner boundary · °C',outer_temperature_C:'Outer boundary · °C'};
 const draftFor=id=>{try{return JSON.parse(localStorage.getItem('mre-forward-input:'+id)||'{}');}catch{return {};}};
 const pretty=v=>Number(v).toLocaleString(undefined,{maximumSignificantDigits:5});
@@ -23,6 +25,7 @@ export default function HypothesisTesting({scene,report,token,job,busy,canBuild,
  const fieldScales=React.useMemo(()=>{const all=[run?.simulation?.baseline_field,...cases.map(c=>c.field)].filter(Boolean);if(!all.length)return null;const temps=all.flatMap(f=>f.samples.map(s=>s.temperature_C)),currents=all.flatMap(f=>f.samples.map(s=>s.current_density_A_m2/10000));return {thermal:[Math.min(...temps),Math.max(...temps)],current:[Math.min(...currents),Math.max(...currents)]};},[run]);
  return <>
  <MaterialForecast report={report} token={token} busy={busy}/>
+ <MaterialModels report={report} token={token} busy={busy}/>
  <section className='panel'><h3>Test the hypotheses</h3>{electricalPairs.length>0&&<details><summary>Electrical measurement basis · check before comparison</summary><ul>{electricalPairs.map((p,i)=><li key={i}>{p.t} s: full-cell V/I = {pretty(p.dc)} Ω; separate resistance = {pretty(p.r)} Ω.</li>)}</ul><p className='small'>These can be different quantities. Specify whether resistance is DC, impedance or differential, and match conditions/windows. Do not automatically equate either with the simulated bulk resistance. Your saved measurements are unchanged.</p></details>}<p className='small'>Evidence rank → bounded physics → next experiment. No LLM-generated damage.</p>
  {scene?<details open={!run}><summary>Scenario assumptions & optional experimental comparator</summary>
  <button type='button' className='text-button' onClick={()=>{setScenario({inner_radius_mm:3,outer_radius_mm:12,height_mm:25,conductivity_S_m:10,thermal_conductivity_W_mK:2,current_A:.5,inner_temperature_C:1600,outer_temperature_C:1500});setSigma(.5);setThermal(.5);setDuration(3600);setAllocation(.8);setAllocationChange(-.2);setGeneration(.11938892416598775);setRecovery(.8);setRecoveryChange(-.2);setResistanceFactor(1.103896103896104);setNotice('Editable synthetic scenario assumptions loaded; not NASA operating values.');}}>Load editable demo assumptions</button>
@@ -44,6 +47,6 @@ export default function HypothesisTesting({scene,report,token,job,busy,canBuild,
  </>}
  </section>
  {shownField&&<p className='input-origin'>{selected===-1?'Baseline selected.':current?.field?`H${current.hypothesis_number}: computed scenario field.`:current?.status==='computed'?`H${current.hypothesis_number}: scalar prediction shown; baseline thermal field retained. No spatial damage is inferred.`:'No supported scenario prediction.'} Not a measured field or confirmed fault.</p>}
- <ReactorLab report={report} token={token} sceneHypotheses={scene} simulatedField={shownField} fieldScales={fieldScales} simulatedOutputs={current?.status==='computed'?current.predicted:null} simulatedMaterial={current?.material_forecast?{...current.material_forecast,...(current.model==='material_recession'?current.predicted:{})}:null} simulatedComponent={current?.material_forecast?.component||(current?.model==='current_allocation'||current?.model==='collection_accounting'?'gas':'melt')}/>
+ <ReactorLab report={report} token={token} sceneHypotheses={scene} simulatedField={shownField} fieldScales={fieldScales} simulatedOutputs={current?.status==='computed'?current.predicted:null} simulatedMaterial={current?.material_forecast?{...current.material_forecast,...(current.model==='material_recession'?current.predicted:{})}:null} simulatedComponent={scenarioComponent(current,scene)}/>
  </>;
 }

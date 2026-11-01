@@ -1,5 +1,7 @@
 import HypothesisLayer from './HypothesisLayer.jsx';
 import ReactorLab from './ReactorLab.jsx';
+import SavedReviews from './SavedReviews.jsx';
+import {toForm,numbers,texts,hasSavedDesignRequirements} from './assessment-form.js';
 import {assessmentLabel} from './review-labels.js';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {get, action, saveDraft} from './api.js';
@@ -8,18 +10,9 @@ import {applyAssessmentOptions} from './assessment-options.js';
 import {readBackup,writeBackup,chooseDraft,browserStorage} from './draft-storage.js';
 
 const options = {gas_accounting_review: 'Gas accounting', current_record_review: 'Electrical record', material_characterization_review: 'Material evidence', repeat_run_comparison: 'Comparable runs'};
-const numbers = ['current_A','collected_o2_g','temperature_C','voltage_V','sample_mass_g','oxygen_uncertainty_g','current_uncertainty_A','duration_uncertainty_s','available_hours','budget_usd'];
-const texts = ['experiment_name','question','feedstock','anode_material','cathode_material','calibration_reference','gas_measurement_method','records_reference','observations','source_label'];
 const stages = [['input_validated','Read input'],['arithmetic_verified','Check calculations'],['original_review','First review'],['critique','Challenge'],['final_review','Final review']];
 const fmt = value => typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString(undefined, {maximumSignificantDigits: 7}) : 'Not available';
 const fit = value => value == null ? 'Unknown' : value ? 'Yes' : 'No';
-function toForm(data = {}) {
-  const result = {...data, duration_h: data.duration_s == null ? '' : data.duration_s / 3600, trace: [], resistance_trace: [], current_trace_text: formatCurrentTrace(data.trace || []), resistance_text: (data.resistance_trace || []).map(r => `${r.time_s},${r.resistance_ohm},${r.source || ''}`).join('\n'),
-    configuration: data.configuration || 'unknown', calibration_status: data.calibration_status || 'unknown', time_alignment: data.time_alignment || 'unknown',
-    analysis_id: data.composition?.analysis_id || '', composition_source: data.composition?.source || '', composition_text: data.composition?.rows.map(r => `${r.oxide},${r.wt_percent}`).join('\n') || '', test_estimates: data.test_estimates || {}};
-  [...numbers,...texts].forEach(key => result[key] = data[key] ?? '');
-  return result;
-}
 function asNumber(value, key) {
   if (value === '' || value == null) return null;
   const number = Number(value);
@@ -209,7 +202,7 @@ export default function App() {
     try {setWorkspace(await get('/api/experiment-workspace'));setConnectionError('');setDraftBlocked(false);} catch (e) {setConnectionError(e.message);}
   },[message]);
   const showAssessment = useCallback(async (id,restoreInputs=false) => {
-    try {const value = await get('/api/assessment?id='+encodeURIComponent(id)); if (!value.report) throw new Error(value.reason || 'Saved assessment is missing or its integrity check failed; do not repeat paid work.'); setSaved(value);setSelectedId(id);if(restoreInputs){setCustomTargets(false);setSetupStep('experiment');setForm(toForm(value.report.input));setOrigin({label:'Restored saved experiment inputs. Editing creates a new input record; the saved review remains unchanged.'});}setView('input');setSetupStep('review');message('Saved result loaded. Opening it does not start another Meta request.');}
+    try {const value = await get('/api/assessment?id='+encodeURIComponent(id)); if (!value.report) throw new Error(value.reason || 'Saved assessment is missing or its integrity check failed; do not repeat paid work.'); setSaved(value);setSelectedId(id);if(restoreInputs){setCustomTargets(hasSavedDesignRequirements(value.report.input));setMeasurementTab('electrical');setForm(toForm(value.report.input));setConsent(false);setOrigin({label:'Showing this saved review’s original inputs. Editing creates a new draft; the saved review remains unchanged.'});}setView('input');setSetupStep('review');message('Saved result loaded. Opening it does not start another Meta request.');}
     catch (e) {message(e.message,true);}
   },[message]);
   useEffect(()=>{
@@ -305,7 +298,7 @@ export default function App() {
     <header><a className="brand" href="/"><span className="moon" aria-hidden="true"/><span>MRE <small>MISSION ENGINEER</small></span></a><nav><button className={`nav ${view === 'input' ? 'active' : ''}`} onClick={newExperiment}>New experiment</button><button className={`nav ${view === 'history' ? 'active' : ''}`} onClick={() => setView('history')}>Saved reviews</button><a href="/validation" className="nav" target="_blank" rel="noopener noreferrer">Validation &amp; methods ↗</a></nav><span className="local">LOCAL WORKSPACE</span></header>
     <main id="main"><section className="intro"><span className="eyebrow">LUNAR OXYGEN · GROUND-TEST REVIEW</span><h1>What does your experiment support?</h1><p>Enter your test record. Let Meta choose checks, question the interpretation, and draft the next evidence request.</p></section>
       {connectionError&&<p className='message'>{connectionError} <button className='text-button' onClick={refresh}>Reconnect without rerunning</button></p>}{workspace?.warnings?.map(w=><p key={w} className='message'>{w}</p>)}<p className='draft-status' role='status'>{draftStatus} {saved&&<a href='#results-panel'>View saved result ↓</a>} {draftConflict&&<button className='text-button' onClick={reloadSavedDraft}>Reload saved draft</button>}</p>
-      {view === 'references' ? <EvidenceLibrary library={library}/> : view === 'history' ? <section className="panel"><h2>Saved reviews</h2>{!workspace?.assessments?.length && <p>No input-driven reviews yet.</p>}{workspace?.assessments?.map(r => <button className="history-button" key={r.id} onClick={() => showAssessment(r.id)}>{r.name}<small>{r.status} · {new Date(r.created_at).toLocaleString()}</small></button>)}</section> : <>
+      {view === 'references' ? <EvidenceLibrary library={library}/> : view === 'history' ? <SavedReviews rows={workspace?.assessments||[]} onOpen={id=>showAssessment(id,true)} busy={busy} loading={!workspace}/> : <>
       <section className="panel"><div className="section-head"><h2>Experiment workspace</h2><button className="text-button" onClick={example} disabled={busy}>Load published example</button></div>
         <p className='small'>* Required to start: experiment name, duration and either constant current or a current history. Additional measurements unlock the corresponding assessment.</p>
         <FormTabs id='setup' items={setupSteps} selected={setupStep} onSelect={setSetupStep}/>
