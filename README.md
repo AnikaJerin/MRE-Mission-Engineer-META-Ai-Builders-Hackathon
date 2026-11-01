@@ -96,20 +96,17 @@ traces are under `outputs/`. Preserve both directories to retain your workspace.
 They are ignored by Git, so a fresh clone will not contain the owner's saved live results.
 Reopening a saved result does not rerun it or spend credits.
 
-### 6. Verify the installation
-
-From the repository root with `.venv` active:
+### 6. Verify the build
 
 ```bash
-PYTHONPATH="$PWD/src" python -m unittest discover -s tests -v
 cd frontend
-npm test
 npm run build
 cd ..
 ```
 
-These checks do not establish live provider availability or physical reactor validity.
-Use an explicitly authorized UI assessment for a live end-to-end check.
+Use an explicitly authorized UI assessment for a live end-to-end check. Development
+test suites and extended walkthroughs were moved to an external cleanup backup;
+those files are not required for normal application startup.
 
 Optional known-cause **synthetic** diagnostic benchmark (up to 15 Wonder requests;
 $3.75 local reservation envelope, not a provider billing cap):
@@ -137,69 +134,50 @@ are immutable: choose new names for a new run. Reuse a freeze only if its protoc
 | SAM returns no matching object | Use a closer crop and a short visible-object description; inspect masks before comparison. |
 | Fresh clone has no saved reviews | Expected: local `outputs/` and the SQLite workspace are not bundled. Create a new run. |
 
-For deeper methods and examples see [researcher workflow](docs/RESEARCHER_WORKFLOW.md)
-and [source-data setup](docs/DATA_SETUP.md). This README is the primary current setup guide.
+This README is the primary setup guide. Source metadata and reuse notes remain in `sources/manifest.json`.
 
-## Scope and correctness
+## Hackathon contributions
 
-This is an evidence-review and experiment-planning prototype, not a calibrated failure
-predictor or NASA-qualified controller. Independent Decimal/Fraction calculations
-check numerical accounting, while source-grounded references check bounded published
-claims. New experiment inputs have no known correct engineering answer by default.
-The UI therefore shows evidence gaps and verification scope rather than a general
-accuracy/health percentage. Hypotheses and next-test utility remain drafts.
+The following describes the submitted implementation, rather than claiming ownership
+of third-party models, libraries, papers or measurements. Git history is the record
+for contribution timing; identify any pre-event work separately before submission.
 
-See [proposal alignment, remaining limits and integration roadmap](docs/SCOPE_ALIGNMENT.md),
-[accounting methods](docs/ACCOUNTING_METHODS.md) and
-[actual dataset usage](docs/DATASET_USAGE.md). Public papers are historical evidence,
-not raw telemetry. No NASA affiliation or worldwide-first claim is made.
+- Manual experiment-entry React UI, persistent local drafts and saved-review table.
+- Python charge/oxygen, composition, energy, resistance and measurement-readiness checks.
+- Meta Muse Wonder tool selection, first review, critic and final review with linked evidence.
+- Additive result-linked hypotheses, reconsideration of prior hypotheses and next-evidence requests.
+- Bounded numerical scenario comparisons, material recession projections and interactive Three.js component views.
+- Cloud SAM segmentation and calibrated before/after projected-silhouette comparison, with separate image reviewer and critic.
+- HTML/JSON exports, source reference library, local request/cost ledger and synthetic diagnostic evaluation.
 
-## Recorded evaluation
+These are evidence-review MVP features. The model is not a physically calibrated
+reactor digital twin, certified fault detector, validated lifetime predictor or reactor controller.
+Synthetic scenarios do not establish real-world accuracy or saved engineering time.
 
-The owner completed six development and six evaluation tasks under T12 freeze
-`t12-v2`: `dev-t12-v3` / `eval-t12-v3`. On evaluation, checklist and resampling were
-6/6, one-pass and challenge/revision 5/6, with full output coverage; available
-numerical fields matched 2/2. Revision made one correction and one regression.
-These small dependent source tasks do not establish general engineering superiority.
-The new input adapter is separately tested; earlier T12 results do not automatically
-validate it. Existing frozen implementations, outputs and failed attempts are preserved.
+## Attribution, data and asset rights
 
-The separate **Validation & methods** page retains source references, independent
-checks, two recorded engineering evidence workflows and benchmark comparisons.
-The `versioned-v3` engineering collection deliberately discloses separately versioned
-components. It is not a single fixed-version prospective reactor experiment.
+| Item | Credit and reuse scope |
+| --- | --- |
+| Published hollow-anode configuration and scalar observations | Yu et al., *Improving Molten Regolith Electrolysis with Zirconia-Based Hollow Anode Technology* (2025), [NASA NTRS 20250004626](https://ntrs.nasa.gov/citations/20250004626). Published arrangement informs an approximate visual model; not measured CAD. Public download does not grant blanket figure-reuse rights. |
+| Other NASA/research references | Exact source URLs, versions and rights notes are retained in `sources/manifest.json` and the versioned benchmark/reference records. NASA hosting does not imply NASA endorsement or that all included works are public domain. |
+| Uploaded photographs and SAM masks | User-supplied local records. Preserve the original source/permission note. Segmentation does not create permission to redistribute the source photograph. Use owned/licensed images or labelled synthetic images in the public demo. |
+| Synthetic QA images and numerical scenarios | Software-test fixtures, not NASA measurements or evidence of actual reactor damage. Their synthetic status must remain visible. |
+| Reactor visualization | Project-authored approximate geometry and Three.js rendering, informed by the cited configuration. No claim of SAM 3D reconstruction or engineering-grade geometry. |
+| Meta models and SDKs | Muse Wonder and SAM are Meta services; model/SDK use remains subject to their applicable terms. They are not project-authored models. |
+| Third-party software | Python jsonschema, React, Vite, Three.js and Meta SAM packages are external dependencies. Preserve their included licences/notices; dependency versions are described by `pyproject.toml` and `frontend/package-lock.json`. |
 
-Reference documentation: [T12 protocol](benchmarks/t12/v1/PROTOCOL.md),
-[ground-truth sources](benchmarks/t12/v1/SOURCES.md),
-[engineering sources](engineering_cases/v1/VALIDATION_SOURCES.md),
-[baseline evaluation](docs/EVALUATION.md) and [legacy validation UI](docs/T12_UI_WORKFLOW.md).
+Local acquired papers under `data/raw/`, uploaded photos, saved outputs and the workspace
+are not intended for redistribution with source code. Check specific rights before
+including any source figure in the submission video. The source manifest is an attribution
+record, not a blanket licence clearance. Repository code licensing must be chosen by the owner;
+this README does not assign a licence to other people's work.
 
-## Reproducibility
+## Files retained for operation
 
-Use the setup and verification commands above. Keep keys, private records and the
-local ledger out of Git. Published-source attribution and acquisition instructions
-are recorded in `sources/manifest.json` and `docs/DATA_SETUP.md`. Local cost estimates
-are not a provider-enforced spending cap.
+- `src/`, `frontend/`, `pyproject.toml`: backend, UI, dependencies and build configuration.
+- `cases/`, `sources/`, `benchmarks/`, `evaluation/`, `engineering_cases/`: runtime reference inputs and evaluation protocols. Some Markdown files are machine-read and hash-checked; retain them.
+- `scripts/`: optional Blender asset-generation utilities.
+- `data/`, `outputs/`: existing local workspace, sources, evidence, results and budget state. Preserve these to keep saved work.
+- `.venv/`, `frontend/node_modules/`: installed local runtimes/dependencies, ignored by Git.
+- `.git/`, `.gitignore`, `README.md`: repository metadata and setup documentation.
 
-## Structured performance assessment upgrade
-
-Manual inputs support measured resistance histories, wall recession with an explicit exposure clock, thermal cycles/crack evidence, observed endurance, energy boundaries, purity, and integrated-system records. Meta generates six separate evidence-linked findings; the UI and HTML/JSON export show each finding's inputs, formulas, independent arithmetic checks, source applicability and actual tool receipts. No overall reactor grade or prewritten case discussion is supplied.
-
-An optional NASA 2026 LEIA Topic 2 profile distinguishes the selected required demonstration duration, encouraged pilot throughput, notional contaminant references and scaling evidence. It is a partial source comparison, not universal reactor acceptance or NASA certification.
-
-- [Performance methods, sources and limitations](docs/PERFORMANCE_ASSESSMENT.md)
-- [Owner-run tests and UI walkthrough](docs/PERFORMANCE_TEST_WORKFLOW.md)
-
-Existing frozen T12 results do not automatically validate later schema changes. Run the current checks and an explicitly authorized live assessment before presenting a changed implementation.
-
-
-## Persistent local workspace and reviewed evidence library
-
-The SQLite workspace (`data/workspace/mre.sqlite3`) retains the draft, selected report and versioned source references. Existing report/event files remain canonical, immutable evidence. Reopening restores the draft and saved review without rerunning Meta. Credit consent and API keys are never stored in the draft.
-
-The Evidence library distinguishes selected NASA requirements from published experimental observations. Condition-matched publication differences are descriptive comparisons, not universal reactor acceptance limits. Purity quantity bases, processed-feedstock mass and available-oxygen inventory are explicit; there are now 22 performance metric entries plus charge accounting.
-
-[Persistence, full capability audit and owner-run reopening checks](docs/PERSISTENCE_AND_REFERENCE_LIBRARY.md) explains the one-time upgrade and normal use. No dependency reinstall, tests, build or paid assessment is required for every reopening. A local backend must be running; the built React UI can be served by that single process.
-
-
-Each new finding and critic comment now includes a short reason and resolved evidence references in the UI and exports. The optional measurement-record field concerns the user's data provenance; scientific formulas and reviewed reference records are already supplied by the backend. See [Decision and critic evidence](docs/DECISION_AND_CRITIC_EVIDENCE.md). The critic is a separate model call/role, not independent expert validation.
