@@ -31,6 +31,10 @@ export default defineConfig({
   server: {
     host: '127.0.0.1', port: 5173, strictPort: true,
     proxy: {'/api/': proxy, '/validation': {target, changeOrigin: true}},
+    allowedHosts: [
+      "pittsburgh-stat-administration-expression.trycloudflare.com"
+    ],
+  
   },
   build: {outDir: 'dist'},
 });
