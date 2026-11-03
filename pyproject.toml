@@ -16,4 +16,4 @@ mre = "mre_engineer.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-mre_engineer = ["resources/*.json", "schemas/*.json", "web/*.html", "web/*.css", "web/*.js", "web/*.xlsx"]
+mre_engineer = ["resources/*.json", "schemas/*.json", "web/*.html", "web/*.css", "web/*.js", "web/amcharts/*.js", "web/*.xlsx"]

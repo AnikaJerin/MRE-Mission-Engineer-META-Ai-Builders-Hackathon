@@ -1,6 +1,7 @@
-"""Readable experiment exports; no API and no retrospective model certification."""
+"""Readable experiment exports;"""
 import html
 import json
+from pathlib import Path
 from .evidence import EvidenceError
 from .experiment_agent import load
 
@@ -22,49 +23,77 @@ def readable(value):
 
 
 def to_html(value):
-    e=html.escape;r=value['assessment'];calc=r['accounting'];body=[]
-    body.append('<h1>'+e(r['input']['experiment_name'])+'</h1><p>'+e(r['input']['question'])+'</p><p>'+e(r['status']+' · '+r['effective_review_status'].replace('_',' '))+'</p>')
-    body.append('<p>Input-driven ground-test review. New user data has no independently known correct engineering decision. Calculations are independently checked; hypotheses and next-test usefulness remain unvalidated.</p>')
-    body.append('<h2>Accounting</h2><table>')
-    for label,key,unit in [('Charge','charge_C','C'),('Ideal oxygen','ideal_o2_g','g'),('Reported collected oxygen','reported_collected_o2_g','g'),('Apparent collected / ideal ratio','apparent_collected_to_charge_ratio',''),('Electrical energy','electrical_energy_Wh','Wh')]:
-        v=calc[key];body.append('<tr><th>'+label+'</th><td>'+e('Not available' if v is None else format(v,'.8g')+' '+unit)+'</td></tr>')
-    body.append('</table><p>'+e(calc['basis'])+'</p>')
-    performance=r.get('performance')
-    if performance:
-        body.append('<h2>Structured performance metrics</h2><table><tr><th>Metric</th><th>Value</th><th>Formula / basis</th></tr>')
-        for m in performance['metrics'].values():body.append('<tr><td>'+e(m['label'])+'</td><td>'+e('Not available' if m['value'] is None else format(m['value'],'.8g')+' '+m['unit'])+'</td><td>'+e(m['formula'])+'</td></tr>')
-        body.append('</table><h2>Declared targets and selected official requirements</h2>'+readable({'user_targets':performance['target_checks'],'official_profile':performance.get('official_profile_checks',[])})+'')
-        body.append('<h2>Decision evidence</h2>')
-        for d in r.get('decision_evidence',[]):
-            body.append('<h3>'+e(d['dimension'])+' — '+e({'supported_observation':'Recorded observation — not a performance pass','concern_supported':'Evidence supports a concern','insufficient_evidence':'More evidence needed'}.get(d['model_status'],d['model_status']))+'</h3><p>'+e(d['model_finding'])+'</p><p>'+e(d.get('model_basis') or '')+'</p><p>'+e(d['improvement_or_next_evidence'])+'</p><details><summary>Inputs, calculations, references and tool receipts</summary>'+readable(d)+'</details>')
-    if performance and performance.get('publication_comparisons'):
-        body.append('<h2>Published observation comparisons</h2>'+readable(performance['publication_comparisons'])+'')
-    if r.get('reference_registry'):body.append('<p>Reference registry version: '+e(r['reference_registry']['version'])+'</p>')
-    if r.get('error'):body.append('<h2>Incomplete workflow</h2><p>'+e(r['error'])+'</p><p>No completed critic/final review is implied. API attempts: '+str(r['api_attempts'])+'</p>')
-    body.append('<h2>Evidence still needed</h2><ul>'+''.join('<li>'+e(g['message'])+'</li>' for g in r['readiness']['gaps'])+'</ul>')
-    for name,key in [('Original review','original_review'),('Critic','critique'),('Final review','final_review')]:
-        data=r[key];body.append('<h2>'+name+'</h2>')
-        if not data:body.append('<p>Not completed.</p>');continue
-        if key=='critique':
-            body.extend('<p>'+e(data[k])+'</p>' for k in ('weakness','rival_explanation','requested_revision'))
-            for c in r.get('critic_evidence',[]):
-                body.append('<h3>'+e(c['dimension']+' — '+c['position'])+'</h3><p>'+e(c['comment'])+'</p><p>Why: '+e(c['basis'])+'</p>')
-                for ref in c['references']:
-                    source=ref.get('source')
-                    body.append('<p>'+('<a href="'+e(source['url'],quote=True)+'">'+e(source.get('title') or source['id'])+'</a>: '+e(source['locator']) if source else e(ref['id']))+'</p>')
-                body.append('<details><summary>Comment evidence</summary>'+readable(c)+'</details>')
-            continue
-        for f in data.get('findings',[]):body.append('<p>'+e(f['text'])+'</p><p>Why: '+e(f.get('basis') or 'Not recorded in this archived version')+'</p><p>Evidence: '+e(', '.join(f['evidence_refs']))+'</p>')
-        for a in data.get('assessments',[]):body.append('<p>'+e(a['dimension']+': '+a['finding'])+'</p><p>Why: '+e(a.get('basis') or 'Not recorded in this archived version')+'</p>')
-        body.append('<p>'+e(data['summary'])+'</p><h3>Unconfirmed explanations</h3><ul>')
-        for h in data['hypotheses']:body.append('<li>'+e(h['explanation'])+'<br>Evidence to distinguish: '+e(h['discriminating_observation'])+'</li>')
-        body.append('</ul><h3>Next evidence request</h3>')
-        body.append('<p>Proposed next request: draft starting point, not a validated priority ranking or proven causal discrimination. Recorded observations are not performance passes.</p>')
-        t=data['next_test'];body.extend('<p>'+e(t[k])+'</p>' for k in ('question','measurement_or_record','rival_outcomes','prerequisites','reason'))
-    body.append('<h2>Sources</h2><ul>')
-    for s in r['sources']:body.append('<li><a href="'+e(s['url'],quote=True)+'">'+e(s['id'])+'</a>: '+e(s['locator'])+'</li>')
-    body.append('</ul><h2>Researcher review</h2>'+readable(value['researcher_review'])+'')
-    body.append('<p>API attempts: '+str(r['api_attempts'])+'; estimated settled cost $'+str(r['settled_estimated_cost_usd'])+'. Saved '+e(r['completed_at'])+'.</p>')
-    body.append('<h2>Integration scope</h2><p>Manual entry is the supported researcher workflow. Read-only potentiostat/DAQ, LIMS and approved reactor-historian adapters are future work. No live equipment connection, official-software compatibility or reactor control is demonstrated.</p>')
-    body.append('<p>Full machine-readable inputs, calculation receipts and event trace are available in the separate JSON export.</p>')
-    return "<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>MRE experiment review</title><style>body{font:16px system-ui;max-width:980px;margin:40px auto;padding:24px;color:#152631}h1,h2{color:#245c60}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #d1dfe0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}li{margin:12px 0}details{margin-top:32px}@media print{body{margin:0}}</style></head><body>"+''.join(body)+'</body></html>'
+    e=lambda v:html.escape(str(v),quote=True)
+    r=value['assessment']; calc=r['accounting']; perf=r.get('performance') or {}
+    def number(v):
+        return format(v,'.5g') if isinstance(v,(float,int)) and not isinstance(v,bool) else str(v)
+    def table(headers,rows):
+        return '<div class="table-wrap"><table><thead><tr>'+''.join('<th>'+e(h)+'</th>' for h in headers)+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+str(c)+'</td>' for c in row)+'</tr>' for row in rows)+'</tbody></table></div>'
+    body=['<header><div class="brand">MRE / MISSION ENGINEER</div><h1>Reactor assessment</h1><p class="name">'+e(r['input']['experiment_name'])+'</p><p class="date">'+e(r.get('completed_at',''))+' · '+e(r['status'].replace('_',' '))+'</p></header>']
+    final=r.get('final_review') or r.get('original_review') or {}
+    if final.get('summary'):body.append('<section class="lead"><h2>Key conclusion</h2><p>'+e(final['summary'])+'</p></section>')
+    if r.get('error'):body.append('<section><h2>Assessment incomplete</h2><p>'+e(r['error'])+'</p></section>')
+    cards=[]
+    for label,key,unit in [('Collected oxygen','reported_collected_o2_g','g'),('Ideal oxygen from charge','ideal_o2_g','g'),('Collected / ideal','apparent_collected_to_charge_ratio','%'),('Electrical energy','electrical_energy_Wh','Wh')]:
+        v=calc.get(key)
+        if v is not None:cards.append('<div class="stat"><span>'+label+'</span><strong>'+e(number(v*100 if unit=='%' else v))+' <small>'+unit+'</small></strong></div>')
+    body.append('<div class="stats">'+''.join(cards)+'</div>')
+    chart=[]
+    for label,key in [('Ideal oxygen','ideal_o2_g'),('Collected oxygen','reported_collected_o2_g')]:
+        if calc.get(key) is not None:chart.append({'category':label,'value':calc[key]})
+    if chart:
+        body.append('<section><h2>Oxygen comparison</h2><div id="oxygen-chart" role="img" aria-label="Ideal and collected oxygen in grams"></div><p id="chart-state" class="small" role="status">Loading chart…</p>'+table(['Quantity','Mass'],[[e(d['category']),e(number(d['value'])+' g')] for d in chart])+'</section>')
+    metrics=[[e(m['label']),e(number(m['value'])),e(m['unit'])] for m in perf.get('metrics',{}).values() if m.get('value') is not None]
+    if metrics:body.append('<section><h2>Calculated performance</h2>'+table(['Measurement','Result','Unit'],metrics)+'</section>')
+    checks=perf.get('target_checks') or []
+    if checks:
+        body.append('<section><h2>Target comparison</h2>'+table(['Measurement','Result','Target','Outcome'],[[e(c['metric_id'].replace('_',' ')),e(number(c['actual'])) if c['actual'] is not None else 'Missing measurement',e(number(c['target'])),e({'within_declared_target':'Within target','outside_declared_target':'Outside target','insufficient_evidence':'More evidence needed'}.get(c['status'],c['status']))] for c in checks])+'</section>')
+    findings=final.get('assessments') or []
+    critics=r.get('critic_evidence') or []
+    if findings or critics:
+        body.append('<section><h2>Review and challenge</h2><div class="pair"><article><h3>Final review</h3>')
+        for f in findings:body.append('<div class="finding"><h4>'+e(f.get('dimension','').replace('_',' '))+'</h4><p>'+e(f.get('finding',''))+'</p>' + ('<p class="small">'+e(f['basis'])+'</p>' if f.get('basis') else '')+'</div>')
+        if not findings:
+            for f in final.get('findings',[]):body.append('<p>'+e(f.get('text',''))+'</p>')
+        body.append('</article><article><h3>Critic</h3>')
+        for c in critics:body.append('<div class="finding"><h4>'+e(c.get('dimension','').replace('_',' '))+'</h4><p>'+e(c.get('comment',''))+'</p>'+('<p class="small">'+e(c['basis'])+'</p>' if c.get('basis') else '')+'</div>')
+        if not critics and r.get('critique'):body.append('<p>'+e(r['critique'].get('weakness',''))+'</p>')
+        body.append('</article></div></section>')
+    comparisons=(perf.get('publication_comparisons') or {}).get('comparisons',[])
+    used={}
+    if comparisons:
+        rows=[]
+        for c in comparisons:
+            if c.get('reported_input') is None:continue
+            url=c.get('source_url',''); used.setdefault(url,set()).add(c.get('locator',''))
+            rows.append([e({'collected_o2_g':'Collected oxygen','initial_resistance_ohm':'Initial resistance','final_resistance_ohm':'Final resistance','wall_loss_um':'Wall loss'}.get(c['field'],c['field'].replace('_',' '))),e(number(c['reported_input'])),e(number(c.get('published_value'))),e(number(c['difference'])) if c.get('difference') is not None else 'Basis differs',e(c.get('unit',''))])
+        if rows:body.append('<section><h2>Published comparison</h2><p class="small">Reported research values provide context; conditions may differ.</p>'+table(['Quantity','Your input','Research value','Difference','Unit'],rows)+'</section>')
+    if final.get('hypotheses'):
+        body.append('<section><h2>Possible explanations</h2><ol>')
+        for h in final['hypotheses']:body.append('<li><p>'+e(h['explanation'])+'</p><p class="small">'+e(h.get('discriminating_observation',''))+'</p></li>')
+        body.append('</ol></section>')
+    t=final.get('next_test') or {}
+    if t:body.append('<section class="next"><h2>Recommended next check</h2>'+''.join('<p>'+e(t[k])+'</p>' for k in ('question','measurement_or_record','reason') if t.get(k))+'</section>')
+    refs=set()
+    for plan in (r.get('original_review'),r.get('final_review')):
+        if plan:
+            for f in plan.get('findings',[])+plan.get('assessments',[]):refs.update(f.get('evidence_refs',[]))
+    for c in critics:
+        for ref in c.get('references',[]):
+            source=ref.get('source')
+            if source and source.get('url'):used.setdefault(source['url'],set()).add(source.get('locator',''))
+    for source in r.get('sources',[]):
+        if source.get('id') in refs and source.get('url'):used.setdefault(source['url'],set()).add(source.get('locator',''))
+    if used:
+        body.append('<section class="sources"><h2>Research used</h2><ol>')
+        for url,locators in used.items():
+            source=next((s for s in r.get('sources',[]) if s.get('url')==url),{})
+            body.append('<li><a href="'+e(url)+'">'+e(source.get('title') or ('Yu et al. 2025' if '20250004626' in url else 'SI defining constants' if 'bipm.org' in url else 'Research reference'))+'</a><span class="small"> · '+e('; '.join(sorted(x for x in locators if x)))+'</span></li>')
+        body.append('</ol></section>')
+    payload=json.dumps(chart).replace('<','\\u003c')
+    library=Path(__file__).parent/'web'/'amcharts'
+    vendor=''.join('<script>'+ (library/name).read_text().replace('</script','<\\/script')+'</script>' for name in ('index.js','xy.js','Animated.js')) if chart else ''
+    scripts=vendor+"""<script>
+    (function(){const state=document.getElementById('chart-state');try{if(!window.am5||!window.am5xy)throw Error();const data=CHARTDATA;const root=am5.Root.new('oxygen-chart');root.setThemes([am5themes_Animated.new(root)]);const chart=root.container.children.push(am5xy.XYChart.new(root,{panX:false,panY:false,paddingLeft:0}));const y=chart.yAxes.push(am5xy.CategoryAxis.new(root,{categoryField:'category',renderer:am5xy.AxisRendererY.new(root,{inversed:true,minGridDistance:25})}));y.data.setAll(data);const x=chart.xAxes.push(am5xy.ValueAxis.new(root,{min:0,renderer:am5xy.AxisRendererX.new(root,{})}));const series=chart.series.push(am5xy.ColumnSeries.new(root,{xAxis:x,yAxis:y,valueXField:'value',categoryYField:'category',fill:am5.color(0x25857c),stroke:am5.color(0x25857c),tooltip:am5.Tooltip.new(root,{labelText:'{categoryY}: {valueX} g'})}));series.columns.template.setAll({cornerRadiusTR:6,cornerRadiusBR:6,height:30});series.data.setAll(data);state.textContent='Mass in grams';window.addEventListener('beforeprint',()=>root.resize());}catch(e){document.getElementById('oxygen-chart').style.display='none';state.textContent='Chart unavailable. Exact values are shown in the table.';}})();</script>""".replace('CHARTDATA',payload) if chart else ''
+    css="""*{box-sizing:border-box}body{margin:0;background:#eff4f5;color:#18333b;font:15px/1.55 system-ui,-apple-system,sans-serif}main{max-width:1100px;margin:32px auto;padding:36px;background:white;border-radius:20px}header{border-bottom:3px solid #25857c;padding-bottom:20px}.brand{letter-spacing:3px;font-size:11px;font-weight:800;color:#25857c}h1{font-size:34px;margin:10px 0}h2{font-size:20px;margin:0 0 16px}h3{font-size:16px;color:#25857c}h4{text-transform:capitalize;margin:0 0 6px}.name{font-size:19px;margin:0}.date,.small{font-size:12px;color:#536c73}section{margin-top:28px;padding-top:20px;border-top:1px solid #dce7e8}.lead{border:0;font-size:17px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.stat{background:#eaf6f3;border-radius:10px;padding:18px}.stat span{display:block;font-size:12px}.stat strong{display:block;font-size:25px;margin-top:8px}.stat small{font-size:14px}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair article{min-width:0;background:#f5f8f9;padding:20px;border-radius:12px}.finding{padding:14px 0;border-bottom:1px solid #dce7e8}.finding p{margin:6px 0}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;background:#eaf2f3}th,td{padding:11px 12px;border-bottom:1px solid #dce7e8;vertical-align:top}td:first-child{width:38%}.table-wrap{width:100%;overflow-x:auto}p,td,li{overflow-wrap:anywhere}#oxygen-chart{width:100%;height:230px}.next{background:#eaf6f3;padding:22px;border-radius:12px}.sources li{margin-bottom:10px}a{color:#196f68}@media(max-width:680px){main{margin:0;padding:20px;border-radius:0}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.pair{grid-template-columns:1fr}h1{font-size:27px}.stat strong{font-size:21px}th,td{padding:8px;font-size:12px}}@media print{body{background:white}main{margin:0;padding:0;max-width:none}section,.stat,.finding{break-inside:avoid}.pair{gap:14px}a{color:inherit;text-decoration:none}h2{break-after:avoid}}"""
+    return "<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>MRE reactor assessment</title><style>"+css+'</style></head><body><main>'+''.join(body)+'</main>'+scripts+'</body></html>'

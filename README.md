@@ -164,6 +164,7 @@ Synthetic scenarios do not establish real-world accuracy or saved engineering ti
 | Synthetic QA images and numerical scenarios | Software-test fixtures, not NASA measurements or evidence of actual reactor damage. Their synthetic status must remain visible. |
 | Reactor visualization | Project-authored approximate geometry and Three.js rendering, informed by the cited configuration. No claim of SAM 3D reconstruction or engineering-grade geometry. |
 | Meta models and SDKs | Muse Wonder and SAM are Meta services; model/SDK use remains subject to their applicable terms. They are not project-authored models. |
+| Export charts | [amCharts 5](https://www.amcharts.com/) libraries are bundled for offline HTML reports. The default amCharts logo is retained. The bundle includes a script-path fallback for inline exports. |
 | Third-party software | Python jsonschema, React, Vite, Three.js and Meta SAM packages are external dependencies. Preserve their included licences/notices; dependency versions are described by `pyproject.toml` and `frontend/package-lock.json`. |
 
 Local acquired papers under `data/raw/`, uploaded photos, saved outputs and the workspace
@@ -181,3 +182,7 @@ this README does not assign a licence to other people's work.
 - `.venv/`, `frontend/node_modules/`: installed local runtimes/dependencies, ignored by Git.
 - `.git/`, `.gitignore`, `README.md`: repository metadata and setup documentation.
 
+
+## References
+
+- [NASA NextSTEP-3 solicitation — SAM.gov](https://sam.gov/opp/812c81b0f0b84943be12a5f29615d3c8/view#attachments-links)

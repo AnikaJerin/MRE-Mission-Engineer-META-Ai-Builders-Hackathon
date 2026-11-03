@@ -100,7 +100,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
         style_hashes=''.join(" 'sha256-"+base64.b64encode(hashlib.sha256(style).digest()).decode()+"'" for style in re.findall(b'<style>(.*?)</style>',body,flags=re.S)) if exported_style else ''
-        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'"+style_hashes+"; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
+        script_hashes=''.join(" 'sha256-"+base64.b64encode(hashlib.sha256(script).digest()).decode()+"'" for script in re.findall(b'<script>(.*?)</script>',body,flags=re.S)) if exported_style else ''
+        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'"+script_hashes+"; style-src 'self'"+style_hashes+"; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
         self.end_headers()
         self.wfile.write(body)
 
@@ -132,6 +133,10 @@ class Handler(BaseHTTPRequestHandler):
                 self._respond(200,json.dumps(workspace_store.registry(self.root),allow_nan=False).encode(),'application/json')
             elif self.path == '/api/experiment-example':
                 self._respond(200,json.dumps({'input':experiment_example(),'example_id':'yu2025-one-hour'},allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/material-forecast-review?'):
+                from .material_forecast_review import latest
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps(latest(self.root,query.get('forecast_id',[''])[0]),allow_nan=False).encode(),'application/json')
             elif self.path.startswith('/api/material-forecast?'):
                 from .material_forecast import latest
                 query=parse_qs(urlparse(self.path).query)

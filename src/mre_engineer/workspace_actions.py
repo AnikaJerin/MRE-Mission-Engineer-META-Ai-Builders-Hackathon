@@ -19,9 +19,9 @@ class Actions:
         with self.lock:return dict(self.job)
 
     def start(self,data):
-        if not isinstance(data,dict) or set(data)-{'action','run_name','freeze_name','split','case_id','consent','input','import_id','example_id','filename','file_base64','assessment_id','review_state','reviewer','comment','preview_sha256','previous_scene_id','capture','scene_id','assumptions','request_id','comparison'}:raise EvidenceError('Unknown action fields')
+        if not isinstance(data,dict) or set(data)-{'action','run_name','freeze_name','split','case_id','consent','input','import_id','example_id','filename','file_base64','assessment_id','review_state','reviewer','comment','preview_sha256','previous_scene_id','capture','scene_id','assumptions','request_id','comparison','forecast_id'}:raise EvidenceError('Unknown action fields')
         action=data.get('action')
-        if action not in ('check','freeze','run','export','stop','preview_assessment','assess','import_excel','review_assessment','reactor_hypotheses','sam_segment','sam_compare','hypothesis_tests','acknowledge_unknown_cost'):raise EvidenceError('Unsupported UI action')
+        if action not in ('check','freeze','run','export','stop','preview_assessment','assess','import_excel','review_assessment','reactor_hypotheses','sam_segment','sam_compare','hypothesis_tests','acknowledge_unknown_cost','explain_forecast'):raise EvidenceError('Unsupported UI action')
         if action=='stop':
             self.stop_event.set();return {'status':'stop-requested','note':'An in-flight request may finish; stop applies before the next request.'}
         for field in ('run_name','freeze_name'):
@@ -63,6 +63,10 @@ class Actions:
             validate_assumptions(data.get('assumptions'))
             scene=load(self.root,safe_name(data.get('scene_id')))
             if scene['status']!='completed':raise EvidenceError('A completed hypothesis set is required')
+        if action=='explain_forecast':
+            if data.get('consent') is not True:raise EvidenceError('Confirm Meta credit use for the explanation')
+            from .material_forecast_review import load_forecast
+            load_forecast(self.root,safe_name(data.get('forecast_id')))
         if action=='acknowledge_unknown_cost':
             if data.get('consent') is not True:raise EvidenceError('Explicit acceptance of unknown cost is required')
             safe_name(data.get('request_id'))
@@ -87,6 +91,9 @@ class Actions:
             elif action=='reactor_hypotheses':
                 from .reactor_hypotheses import run
                 result=run(self.root,data['assessment_id'],True,data.get('previous_scene_id'),stop=self.stop_event.is_set,progress=progress)
+            elif action=='explain_forecast':
+                from .material_forecast_review import run
+                result=run(self.root,data['forecast_id'],True,stop=self.stop_event.is_set,progress=progress)
             elif action=='hypothesis_tests':
                 from .hypothesis_tests import run
                 result=run(self.root,data['scene_id'],data['assumptions'],True,stop=self.stop_event.is_set,progress=progress)

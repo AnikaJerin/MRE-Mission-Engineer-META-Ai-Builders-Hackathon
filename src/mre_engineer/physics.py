@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .evidence import EvidenceError
 
-# F = N_A * e from the fixed SI constants (BIPM). Float representation is rounded.
+# F = N_A * e from the fixed SI constants (BIPM).
 FARADAY_C_PER_MOL = 96485.33212331002
 # CIAAW abridged standard atomic weights (2024), used as approximate g/mol.
 ATOMIC_MASS = {"O": 15.999, "Si": 28.085, "Fe": 55.845, "Mg": 24.305,
