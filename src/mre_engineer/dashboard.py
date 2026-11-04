@@ -83,6 +83,15 @@ def researcher_workspace(root,server):
             'workspace_id':workspace_store.workspace_id(root),'persistence':server.persistence,'draft':draft,'persistence_error':persistence_error,'warnings':warnings}
 
 
+def allowed_request(host, origin=None):
+    public = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '').strip().lower()
+    if public:
+        return host == public and (origin is None or origin == 'https://' + public)
+    port = os.environ.get('MRE_LISTEN_PORT')
+    hosts = {f'127.0.0.1:{port}', f'localhost:{port}'}
+    return host in hosts and (origin is None or origin == 'http://' + host)
+
+
 class Handler(BaseHTTPRequestHandler):
     def __init__(self, *args, root, accounting_run="v1", investigation_run="v1",pilot_run="full-pilot-v4",source_run="v1",release_run="v1",engineering_run="v1", **kwargs):
         self.root = root
@@ -107,7 +116,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         port = self.server.server_port
-        if self.headers.get("Host") not in {f"127.0.0.1:{port}", f"localhost:{port}"}:
+        if not allowed_request(self.headers.get("Host", "")):
             self._respond(403, b"Local host required", "text/plain")
             return
         routes = {"/": ("react-start.html", "text/html; charset=utf-8"),
@@ -120,6 +129,8 @@ class Handler(BaseHTTPRequestHandler):
             dist=Path(self.root)/'frontend/dist'
             if self.path=='/' and (dist/'index.html').is_file():
                 self._respond(200,(dist/'index.html').read_bytes(),'text/html; charset=utf-8')
+            elif self.path in ('/demo/before-plate-cropped-synthetic.png', '/demo/after-plate-cropped-synthetic.png'):
+                self._respond(200,(dist/self.path.lstrip('/')).read_bytes(),'image/png')
             elif self.path.startswith('/assets/'):
                 name=self.path[len('/assets/'):]
                 if not re.fullmatch(r'[A-Za-z0-9_.-]+\.(js|css|svg|png|woff2)',name):raise EvidenceError('Unknown asset')
@@ -244,7 +255,7 @@ class Handler(BaseHTTPRequestHandler):
         allowed={f'127.0.0.1:{port}',f'localhost:{port}'}
         host=self.headers.get('Host','')
         origin=self.headers.get('Origin','')
-        if host not in allowed or origin!=f'http://{host}' or not hmac.compare_digest(self.headers.get('X-MRE-Token','').encode('utf-8'),self.server.csrf.encode('utf-8')):
+        if not allowed_request(host, origin) or not hmac.compare_digest(self.headers.get('X-MRE-Token','').encode('utf-8'),self.server.csrf.encode('utf-8')):
             self._respond(403,b'{"error":"Local same-origin token required"}','application/json');return
         if self.path not in ('/api/actions','/api/workspace-draft','/api/reactor-scenario','/api/material-forecast','/api/material-model','/api/material-properties') or self.headers.get('Content-Type','').split(';')[0]!='application/json':
             self._respond(400,b'{"error":"Unsupported local action route or content type"}','application/json');return
@@ -288,7 +299,12 @@ def serve(root, port=8766, accounting_run="v1", investigation_run="v1",pilot_run
     run_directory(root, accounting_run)  # validate name before binding any socket
     investigation_folder(root, investigation_run)
     for name in (pilot_run,source_run,release_run,engineering_run):safe_name(name)
-    server = ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, root=Path(root), accounting_run=accounting_run, investigation_run=investigation_run,pilot_run=pilot_run,source_run=source_run,release_run=release_run,engineering_run=engineering_run))
+    public = bool(os.environ.get('RENDER_EXTERNAL_HOSTNAME', '').strip())
+    if public:
+        port = int(os.environ.get('PORT', port))
+    os.environ['MRE_LISTEN_PORT'] = str(port)
+    server = ThreadingHTTPServer(("0.0.0.0" if public else "127.0.0.1", port), partial(Handler, root=Path(root), accounting_run=accounting_run, investigation_run=investigation_run,pilot_run=pilot_run,source_run=source_run,release_run=release_run,engineering_run=engineering_run))
+    os.environ['MRE_LISTEN_PORT'] = str(server.server_port)
     try:server.persistence=workspace_store.initialize(root)
     except Exception:
         server.server_close();raise
