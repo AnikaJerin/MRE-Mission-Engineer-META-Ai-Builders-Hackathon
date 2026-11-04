@@ -110,7 +110,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Referrer-Policy", "no-referrer")
         style_hashes=''.join(" 'sha256-"+base64.b64encode(hashlib.sha256(style).digest()).decode()+"'" for style in re.findall(b'<style>(.*?)</style>',body,flags=re.S)) if exported_style else ''
         script_hashes=''.join(" 'sha256-"+base64.b64encode(hashlib.sha256(script).digest()).decode()+"'" for script in re.findall(b'<script>(.*?)</script>',body,flags=re.S)) if exported_style else ''
-        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'"+script_hashes+"; style-src 'self'"+style_hashes+"; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
+        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'"+script_hashes+"; style-src 'self'"+style_hashes+"; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
         self.end_headers()
         self.wfile.write(body)
 
