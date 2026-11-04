@@ -180,6 +180,10 @@ class Handler(BaseHTTPRequestHandler):
                 from .sam_comparison import load
                 query=parse_qs(urlparse(self.path).query)
                 self._respond(200,json.dumps(load(self.root,safe_name(query.get('id',[''])[0])),allow_nan=False).encode(),'application/json')
+            elif self.path.startswith('/api/sam-segmentation?'):
+                from .sam_assets import load
+                query=parse_qs(urlparse(self.path).query)
+                self._respond(200,json.dumps({'latest':load(self.root,safe_name(query.get('id',[''])[0]))},allow_nan=False).encode(),'application/json')
             elif self.path == '/api/sam-segmentation':
                 from .sam_assets import latest
                 self._respond(200,json.dumps(latest(self.root),allow_nan=False).encode(),'application/json')

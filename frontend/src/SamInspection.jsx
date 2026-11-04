@@ -29,7 +29,7 @@ function Overlay({result,onInspect}){
 
 export default function SamInspection({token,job,busy,canBuild,onRefresh}){
  const [image,setImage]=useState(null),[component,setComponent]=useState('vessel'),[concept,setConcept]=useState('ceramic tube'),[consent,setConsent]=useState(false),[saved,setSaved]=useState(null),[notice,setNotice]=useState(''),[pending,setPending]=useState(false);
- useEffect(()=>{let active=true;get('/api/sam-segmentation').then(v=>active&&setSaved(v.latest)).catch(e=>active&&setNotice(e.message));return()=>{active=false;};},[job?.result?.sam_id]);
+ useEffect(()=>{let active=true;const id=job?.action==='sam_segment'?job?.result?.sam_id:null;get('/api/sam-segmentation'+(id?'?id='+encodeURIComponent(id):'')).then(v=>active&&setSaved(v.latest)).catch(e=>active&&setNotice(e.message));return()=>{active=false;};},[job?.action,job?.result?.sam_id]);
  async function choose(e){
   setConsent(false);const file=e.target.files?.[0];e.target.value='';if(!file)return;
   try{if(file.type!=='image/png'||file.size>750000)throw new Error('Choose a PNG up to 750 KB, 16–1200 pixels per side.');
